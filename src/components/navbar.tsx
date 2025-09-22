@@ -42,13 +42,6 @@ export function Navbar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link href="/about" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-                  About
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
                 <Link href="/contact" className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
                   Contact
                 </Link>
@@ -60,7 +53,7 @@ export function Navbar() {
         {/* Desktop CTA Button */}
         <div className="hidden md:flex items-center space-x-4">
           <Button asChild>
-            <Link href="/book">Book Repair</Link>
+            <Link href="/book">Boek Reparatie</Link>
           </Button>
         </div>
 
@@ -73,20 +66,13 @@ export function Navbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-            <div className="flex flex-col space-y-4 mt-8">
+            <div className="flex flex-col items-center space-y-4 mt-8">
               <Link
                 href="/"
                 className="text-lg font-medium hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-lg font-medium hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                About
               </Link>
               <Link
                 href="/contact"
@@ -97,7 +83,7 @@ export function Navbar() {
               </Link>
               <Button asChild className="mt-4">
                 <Link href="/book" onClick={() => setIsOpen(false)}>
-                  Book Repair
+                  Boek Reparatie
                 </Link>
               </Button>
             </div>

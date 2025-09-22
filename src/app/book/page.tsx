@@ -151,9 +151,9 @@ export default function BookPage() {
       const emailSent = await sendBookingConfirmationEmail(emailData);
       
       if (emailSent) {
-        alert(`Booking confirmed! Booking ID: ${bookingId}\n\nA confirmation email has been sent to ${data.email}. We&apos;ll contact you soon to confirm your appointment.`);
+        alert(`Boeking bevestigd! Boeking ID: ${bookingId}\n\nEen bevestigingsmail is verzonden naar ${data.email}. Wij nemen binnenkort contact met u op om uw afspraak te bevestigen.`);
       } else {
-        alert(`Booking submitted! Booking ID: ${bookingId}\n\nWe&apos;ll contact you soon to confirm your appointment.`);
+        alert(`Boeking ingediend! Boeking ID: ${bookingId}\n\nWij nemen binnenkort contact met u op om uw afspraak te bevestigen.`);
       }
       
       // Reset form
@@ -165,7 +165,7 @@ export default function BookPage() {
       
     } catch (error) {
       console.error("Booking submission error:", error);
-      alert("There was an error submitting your booking. Please try again or contact us directly.");
+      alert("Er is een fout opgetreden bij het indienen van uw boeking. Probeer het opnieuw of neem direct contact met ons op.");
     } finally {
       setIsSubmitting(false);
     }
@@ -178,10 +178,10 @@ export default function BookPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Book Your Device Repair
+              Boek Uw Apparaat Reparatie
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get your device fixed by our expert technicians. Fill out the form below and we&apos;ll get back to you within 24 hours.
+              Laat uw apparaat repareren door onze expert technici. Vul het onderstaande formulier in en wij nemen binnen 24 uur contact met u op.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ export default function BookPage() {
                   <div className="bg-white rounded-lg shadow-lg p-8">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <Phone className="h-6 w-6 mr-3 text-blue-600" />
-                      Step 1: Device Information
+                      Stap 1: Apparaat Informatie
                     </h3>
                     
                     <div className="space-y-6">
@@ -204,7 +204,7 @@ export default function BookPage() {
                         name="deviceType"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Device Type *</FormLabel>
+                            <FormLabel>Apparaat Type *</FormLabel>
                             <Select
                               onValueChange={(value) => {
                                 field.onChange(value);
@@ -244,7 +244,7 @@ export default function BookPage() {
                           name="deviceDescription"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Device Description *</FormLabel>
+                              <FormLabel>Apparaat Beschrijving *</FormLabel>
                               <FormControl>
                                 <Textarea
                                   placeholder="Please describe your device (e.g., MacBook Pro 13-inch, Apple Watch Series 8, etc.)"
@@ -263,7 +263,7 @@ export default function BookPage() {
                             name="brand"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{selectedDeviceType === "phone" ? "Phone" : "Tablet"} Brand *</FormLabel>
+                                <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Merk *</FormLabel>
                                 <Select
                                   onValueChange={(value) => {
                                     field.onChange(value);
@@ -296,7 +296,7 @@ export default function BookPage() {
                             name="model"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>{selectedDeviceType === "phone" ? "Phone" : "Tablet"} Model *</FormLabel>
+                                <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Model *</FormLabel>
                                 <Select
                                   onValueChange={field.onChange}
                                   value={field.value}
@@ -327,11 +327,11 @@ export default function BookPage() {
                         name="service"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Repair Service Needed *</FormLabel>
+                            <FormLabel>Benodigde Reparatie Service *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select service" />
+                                  <SelectValue placeholder="Selecteer service" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -355,10 +355,10 @@ export default function BookPage() {
                         name="issue"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Describe the Issue</FormLabel>
+                            <FormLabel>Beschrijf het Probleem</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Please describe what's wrong with your device in detail (optional - we can assess the issue during your visit)..."
+                                placeholder="Beschrijf wat er mis is met uw apparaat in detail (optioneel - wij kunnen het probleem beoordelen tijdens uw bezoek)..."
                                 className="min-h-[100px]"
                                 {...field}
                               />
@@ -376,7 +376,7 @@ export default function BookPage() {
                         disabled={!isDeviceSectionComplete()}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-8"
                       >
-                        Next: Schedule Appointment
+                        Volgende: Afspraak Inplannen
                       </Button>
                     </div>
                   </div>
@@ -387,7 +387,7 @@ export default function BookPage() {
                   <div ref={step2Ref} className="bg-white rounded-lg shadow-lg p-8">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <Calendar className="h-6 w-6 mr-3 text-blue-600" />
-                      Step 2: Schedule Appointment
+                      Stap 2: Afspraak Inplannen
                     </h3>
                     
                     <div className="grid md:grid-cols-2 gap-6">
@@ -396,7 +396,7 @@ export default function BookPage() {
                         name="preferredDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Preferred Date *</FormLabel>
+                            <FormLabel>Gewenste Datum *</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -410,11 +410,11 @@ export default function BookPage() {
                         name="preferredTime"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Preferred Time *</FormLabel>
+                            <FormLabel>Gewenste Tijd *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select time" />
+                                  <SelectValue placeholder="Selecteer tijd" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -438,7 +438,7 @@ export default function BookPage() {
                         disabled={!isSchedulingSectionComplete()}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-8"
                       >
-                        Next: Personal Info
+                        Volgende: Persoonlijke Info
                       </Button>
                     </div>
                   </div>
@@ -449,7 +449,7 @@ export default function BookPage() {
                   <div className="bg-white rounded-lg shadow-lg p-8">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <User className="h-6 w-6 mr-3 text-blue-600" />
-                      Step 3: Personal Information
+                      Stap 3: Persoonlijke Informatie
                     </h3>
                     
                     <div className="space-y-6">
@@ -459,7 +459,7 @@ export default function BookPage() {
                           name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name *</FormLabel>
+                              <FormLabel>Volledige Naam *</FormLabel>
                               <FormControl>
                                 <Input placeholder="John Doe" {...field} />
                               </FormControl>
@@ -473,7 +473,7 @@ export default function BookPage() {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email Address *</FormLabel>
+                              <FormLabel>E-mailadres *</FormLabel>
                               <FormControl>
                                 <Input type="email" placeholder="john@example.com" {...field} />
                               </FormControl>
@@ -488,7 +488,7 @@ export default function BookPage() {
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number *</FormLabel>
+                            <FormLabel>Telefoonnummer *</FormLabel>
                             <FormControl>
                               <Input type="tel" placeholder="+31 123 456 7890" {...field} />
                             </FormControl>
@@ -504,7 +504,7 @@ export default function BookPage() {
                         className="bg-blue-600 hover:bg-blue-700 text-white px-8"
                         disabled={isSubmitting}
                       >
-                        {isSubmitting ? "Submitting..." : "Book Repair Appointment"}
+                        {isSubmitting ? "Bezig met verzenden..." : "Boek Reparatie Afspraak"}
                       </Button>
                     </div>
                   </div>

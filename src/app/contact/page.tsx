@@ -20,10 +20,10 @@ export default function ContactPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Contact Us
+              Neem Contact Op
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get in touch with our expert team. We&apos;re here to help with all your phone repair needs.
+              Neem contact op met ons expert team. Wij zijn er om u te helpen met al uw telefoonreparatie behoeften.
             </p>
           </div>
 
@@ -32,7 +32,7 @@ export default function ContactPage() {
             <div className="space-y-8">
               {/* Business Info */}
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Get In Touch</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Neem Contact Op</h2>
                 
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
@@ -40,7 +40,7 @@ export default function ContactPage() {
                       <MapPin className="h-6 w-6 text-blue-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Visit Our Store</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1">Bezoek Onze Winkel</h3>
                       <p className="text-gray-600">
                         Wirixstraat 54<br />
                         1222 NS Hilversum<br />
@@ -54,9 +54,9 @@ export default function ContactPage() {
                       <Phone className="h-6 w-6 text-blue-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Call Us</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1">Bel Ons</h3>
                       <p className="text-gray-600">+31 123 456 7890</p>
-                      <p className="text-sm text-gray-500 mt-1">Available during business hours</p>
+                      <p className="text-sm text-gray-500 mt-1">Beschikbaar tijdens openingstijden</p>
                     </div>
                   </div>
                   
@@ -65,9 +65,9 @@ export default function ContactPage() {
                       <Mail className="h-6 w-6 text-blue-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Email Us</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1">E-mail Ons</h3>
                       <p className="text-gray-600">info@fixuphone.nl</p>
-                      <p className="text-sm text-gray-500 mt-1">We respond within 24 hours</p>
+                      <p className="text-sm text-gray-500 mt-1">Wij reageren binnen 24 uur</p>
                     </div>
                   </div>
                   
@@ -76,11 +76,11 @@ export default function ContactPage() {
                       <Clock className="h-6 w-6 text-blue-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1">Openingstijden</h3>
                       <div className="text-gray-600 space-y-1">
-                        <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                        <p>Saturday: 10:00 AM - 4:00 PM</p>
-                        <p>Sunday: Closed</p>
+                        <p>Maandag - Vrijdag: 9:00 - 18:00</p>
+                        <p>Zaterdag: 10:00 - 16:00</p>
+                        <p>Zondag: Gesloten</p>
                       </div>
                     </div>
                   </div>
@@ -89,7 +89,7 @@ export default function ContactPage() {
 
               {/* Features */}
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Why Choose Us?</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Waarom Kiezen Voor Ons?</h2>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="flex items-start space-x-3">
@@ -97,8 +97,8 @@ export default function ContactPage() {
                       <Shield className="h-5 w-5 text-green-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">1-Year Warranty</h3>
-                      <p className="text-sm text-gray-600">All repairs come with our comprehensive warranty</p>
+                      <h3 className="font-semibold text-gray-900">1-Jaar Garantie</h3>
+                      <p className="text-sm text-gray-600">Alle reparaties komen met onze uitgebreide garantie</p>
                     </div>
                   </div>
                   
@@ -107,8 +107,8 @@ export default function ContactPage() {
                       <Star className="h-5 w-5 text-yellow-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">Expert Technicians</h3>
-                      <p className="text-sm text-gray-600">Certified professionals with years of experience</p>
+                      <h3 className="font-semibold text-gray-900">Expert Technici</h3>
+                      <p className="text-sm text-gray-600">Gecertificeerde professionals met jaren ervaring</p>
                     </div>
                   </div>
                   
@@ -117,8 +117,8 @@ export default function ContactPage() {
                       <Car className="h-5 w-5 text-blue-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">Free Parking</h3>
-                      <p className="text-sm text-gray-600">Convenient parking available right outside</p>
+                      <h3 className="font-semibold text-gray-900">Gratis Parkeren</h3>
+                      <p className="text-sm text-gray-600">Handig parkeren direct buiten beschikbaar</p>
                     </div>
                   </div>
                   
@@ -127,8 +127,8 @@ export default function ContactPage() {
                       <Wifi className="h-5 w-5 text-purple-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">Free WiFi</h3>
-                      <p className="text-sm text-gray-600">Stay connected while you wait</p>
+                      <h3 className="font-semibold text-gray-900">Gratis WiFi</h3>
+                      <p className="text-sm text-gray-600">Blijf verbonden terwijl u wacht</p>
                     </div>
                   </div>
                 </div>
@@ -137,7 +137,7 @@ export default function ContactPage() {
 
             {/* Map */}
             <div className="bg-white rounded-lg shadow-lg p-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Find Us</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Vind Ons</h2>
                 
                 <div className="aspect-video rounded-lg overflow-hidden">
                   <iframe
@@ -153,12 +153,12 @@ export default function ContactPage() {
                 </div>
                 
                 <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                  <h3 className="font-semibold text-blue-900 mb-2">Getting Here</h3>
+                  <h3 className="font-semibold text-blue-900 mb-2">Hoe Hier Te Komen</h3>
                   <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• 5 minutes walk from Hilversum Central Station</li>
-                    <li>• Free parking available on-site</li>
-                    <li>• Accessible by public transport (bus lines 1, 2, 3)</li>
-                    <li>• Wheelchair accessible entrance</li>
+                    <li>• 5 minuten lopen vanaf Hilversum Centraal</li>
+                    <li>• Gratis parkeren beschikbaar op locatie</li>
+                    <li>• Bereikbaar met openbaar vervoer (buslijnen 1, 2, 3)</li>
+                    <li>• Rolstoeltoegankelijke ingang</li>
                   </ul>
                 </div>
               </div>

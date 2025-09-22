@@ -78,14 +78,26 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Your Trusted Phone Repair Partner in Hilversum
+              Uw Betrouwbare Telefoonreparatie Partner in Hilversum
             </h2>
             <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-              At FixUphone, we specialize in professional phone repairs for all major brands. 
-              Our certified technicians use only original parts and provide a comprehensive 
-              1-year warranty on all repairs. From cracked screens to battery replacements, 
-              we&apos;ve got you covered with fast, reliable service.
+              Bij FixUphone specialiseren wij ons in professionele telefoonreparaties voor alle grote merken. 
+              Onze gecertificeerde technici gebruiken alleen originele onderdelen en bieden een uitgebreide 
+              1-jarige garantie op alle reparaties. Van gebarsten schermen tot batterijvervangingen, 
+              wij zorgen voor snelle en betrouwbare service.
             </p>
+            
+            {/* CTA Button */}
+            <div className="space-y-4 mb-12">
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+                <Link href="/book">
+                  Boek Nu Uw Reparatie
+                </Link>
+              </Button>
+              <p className="text-sm text-gray-500">
+                Gratis diagnose • Geen verplichting • Snelle service
+              </p>
+            </div>
             
             {/* Features Grid */}
             <div className="grid md:grid-cols-4 gap-6 mb-12">
@@ -93,46 +105,35 @@ export default function Home() {
                 <div className="bg-blue-100 p-4 rounded-full mb-4">
                   <Phone className="h-8 w-8 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">All Brands</h3>
-                <p className="text-sm text-gray-600 text-center">iPhone, Samsung, Google, and more</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Alle Merken</h3>
+                <p className="text-sm text-gray-600 text-center">iPhone, Samsung, Google en meer</p>
               </div>
               
               <div className="flex flex-col items-center p-6">
                 <div className="bg-green-100 p-4 rounded-full mb-4">
                   <Shield className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">1-Year Warranty</h3>
-                <p className="text-sm text-gray-600 text-center">Comprehensive coverage on all repairs</p>
+                <h3 className="font-semibold text-gray-900 mb-2">1-Jaar Garantie</h3>
+                <p className="text-sm text-gray-600 text-center">Uitgebreide dekking op alle reparaties</p>
               </div>
               
               <div className="flex flex-col items-center p-6">
                 <div className="bg-yellow-100 p-4 rounded-full mb-4">
                   <Clock className="h-8 w-8 text-yellow-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Same-Day Service</h3>
-                <p className="text-sm text-gray-600 text-center">Most repairs completed in hours</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Service Op Dezelfde Dag</h3>
+                <p className="text-sm text-gray-600 text-center">De meeste reparaties binnen enkele uren</p>
               </div>
               
               <div className="flex flex-col items-center p-6">
                 <div className="bg-purple-100 p-4 rounded-full mb-4">
                   <Star className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Expert Technicians</h3>
-                <p className="text-sm text-gray-600 text-center">Certified professionals with experience</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Expert Technici</h3>
+                <p className="text-sm text-gray-600 text-center">Gecertificeerde professionals met ervaring</p>
               </div>
             </div>
 
-            {/* CTA Button */}
-            <div className="space-y-4">
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-                <Link href="/book">
-                  Book Your Repair Now
-                </Link>
-              </Button>
-              <p className="text-sm text-gray-500">
-                Free diagnostic • No obligation • Quick turnaround
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -142,21 +143,21 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Located in the Heart of Hilversum
+              Gevestigd in het Hart van Hilversum
             </h3>
             <p className="text-gray-600 mb-6">
-              Visit our store at Wirixstraat 54, just 5 minutes walk from Hilversum Central Station. 
-              Free parking available and easily accessible by public transport.
+              Bezoek onze winkel aan Wirixstraat 54, slechts 5 minuten lopen vanaf Hilversum Centraal. 
+              Gratis parkeren beschikbaar en gemakkelijk bereikbaar met het openbaar vervoer.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="outline">
                 <Link href="/contact">
-                  Visit Our Store
+                  Bezoek Onze Winkel
                 </Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="tel:+311234567890">
-                  Call +31 123 456 7890
+                  Bel +31 123 456 7890
                 </Link>
               </Button>
             </div>
