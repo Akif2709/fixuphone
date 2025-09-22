@@ -1,103 +1,168 @@
-import Image from "next/image";
+
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Phone, Shield, Clock, Star } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const carouselImages = [
+    {
+      src: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      alt: "Professional phone repair technician working on iPhone",
+      title: "Expert Phone Repairs",
+      description: "Professional technicians with years of experience"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      alt: "High-quality phone screen replacement",
+      title: "Quality Parts & Service",
+      description: "Original parts and comprehensive warranty"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80",
+      alt: "Fast and reliable phone repair service",
+      title: "Quick & Reliable",
+      description: "Same-day repairs available for most issues"
+    }
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Hero Section with Carousel */}
+      <section className="relative">
+        <div className="container mx-auto px-4 py-12">
+          <div className="max-w-6xl mx-auto">
+            <Carousel className="w-full">
+              <CarouselContent>
+                {carouselImages.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative">
+                      <div className="aspect-video rounded-lg overflow-hidden shadow-2xl">
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                          <div className="text-center text-white p-8">
+                            <h2 className="text-4xl md:text-6xl font-bold mb-4">
+                              {image.title}
+                            </h2>
+                            <p className="text-xl md:text-2xl mb-8 max-w-2xl">
+                              {image.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-4" />
+              <CarouselNext className="right-4" />
+            </Carousel>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Description Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Your Trusted Phone Repair Partner in Hilversum
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
+              At FixUphone, we specialize in professional phone repairs for all major brands. 
+              Our certified technicians use only original parts and provide a comprehensive 
+              1-year warranty on all repairs. From cracked screens to battery replacements, 
+              we've got you covered with fast, reliable service.
+            </p>
+            
+            {/* Features Grid */}
+            <div className="grid md:grid-cols-4 gap-6 mb-12">
+              <div className="flex flex-col items-center p-6">
+                <div className="bg-blue-100 p-4 rounded-full mb-4">
+                  <Phone className="h-8 w-8 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">All Brands</h3>
+                <p className="text-sm text-gray-600 text-center">iPhone, Samsung, Google, and more</p>
+              </div>
+              
+              <div className="flex flex-col items-center p-6">
+                <div className="bg-green-100 p-4 rounded-full mb-4">
+                  <Shield className="h-8 w-8 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">1-Year Warranty</h3>
+                <p className="text-sm text-gray-600 text-center">Comprehensive coverage on all repairs</p>
+              </div>
+              
+              <div className="flex flex-col items-center p-6">
+                <div className="bg-yellow-100 p-4 rounded-full mb-4">
+                  <Clock className="h-8 w-8 text-yellow-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Same-Day Service</h3>
+                <p className="text-sm text-gray-600 text-center">Most repairs completed in hours</p>
+              </div>
+              
+              <div className="flex flex-col items-center p-6">
+                <div className="bg-purple-100 p-4 rounded-full mb-4">
+                  <Star className="h-8 w-8 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Expert Technicians</h3>
+                <p className="text-sm text-gray-600 text-center">Certified professionals with experience</p>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <div className="space-y-4">
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+                <Link href="/book">
+                  Book Your Repair Now
+                </Link>
+              </Button>
+              <p className="text-sm text-gray-500">
+                Free diagnostic • No obligation • Quick turnaround
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Info Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Located in the Heart of Hilversum
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Visit our store at Wirixstraat 54, just 5 minutes walk from Hilversum Central Station. 
+              Free parking available and easily accessible by public transport.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild variant="outline">
+                <Link href="/contact">
+                  Visit Our Store
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="tel:+311234567890">
+                  Call +31 123 456 7890
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

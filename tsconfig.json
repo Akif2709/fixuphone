@@ -15,11 +15,24 @@
     "incremental": true,
     "plugins": [
       {
+        "name": "typescript",
+      },
+      {
+        "name": "eslint",
+      },
+      {
+        "name": "prettier",
+      },
+      {
+        "name": "stylelint",
+      },
+      {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@styles/*": ["./src/styles/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
