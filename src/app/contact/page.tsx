@@ -23,7 +23,7 @@ export default function ContactPage() {
               Contact Us
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get in touch with our expert team. We're here to help with all your phone repair needs.
+              Get in touch with our expert team. We&apos;re here to help with all your phone repair needs.
             </p>
           </div>
 

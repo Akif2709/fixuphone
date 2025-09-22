@@ -144,14 +144,78 @@ export const phoneBrands: PhoneBrand[] = [
   },
 ];
 
+export const deviceTypes = [
+  { id: "phone", name: "Phone", description: "Smartphones and mobile phones" },
+  { id: "tablet", name: "Tablet", description: "iPad, Android tablets, and other tablets" },
+  { id: "other", name: "Other Device", description: "Laptops, smartwatches, or other electronic devices" },
+];
+
+export const tabletBrands: PhoneBrand[] = [
+  {
+    id: "apple-tablet",
+    name: "Apple iPad",
+    models: [
+      { id: "ipad-pro-12.9-6th", name: "iPad Pro 12.9\" (6th generation)", year: 2022 },
+      { id: "ipad-pro-11-4th", name: "iPad Pro 11\" (4th generation)", year: 2022 },
+      { id: "ipad-air-5th", name: "iPad Air (5th generation)", year: 2022 },
+      { id: "ipad-10th", name: "iPad (10th generation)", year: 2022 },
+      { id: "ipad-mini-6th", name: "iPad mini (6th generation)", year: 2021 },
+      { id: "ipad-pro-12.9-5th", name: "iPad Pro 12.9\" (5th generation)", year: 2021 },
+      { id: "ipad-pro-11-3rd", name: "iPad Pro 11\" (3rd generation)", year: 2021 },
+      { id: "ipad-air-4th", name: "iPad Air (4th generation)", year: 2020 },
+      { id: "ipad-9th", name: "iPad (9th generation)", year: 2021 },
+      { id: "ipad-8th", name: "iPad (8th generation)", year: 2020 },
+    ],
+  },
+  {
+    id: "samsung-tablet",
+    name: "Samsung Galaxy Tab",
+    models: [
+      { id: "galaxy-tab-s9-ultra", name: "Galaxy Tab S9 Ultra", year: 2023 },
+      { id: "galaxy-tab-s9-plus", name: "Galaxy Tab S9+", year: 2023 },
+      { id: "galaxy-tab-s9", name: "Galaxy Tab S9", year: 2023 },
+      { id: "galaxy-tab-s8-ultra", name: "Galaxy Tab S8 Ultra", year: 2022 },
+      { id: "galaxy-tab-s8-plus", name: "Galaxy Tab S8+", year: 2022 },
+      { id: "galaxy-tab-s8", name: "Galaxy Tab S8", year: 2022 },
+      { id: "galaxy-tab-a8", name: "Galaxy Tab A8", year: 2021 },
+      { id: "galaxy-tab-a7-lite", name: "Galaxy Tab A7 Lite", year: 2021 },
+    ],
+  },
+  {
+    id: "google-tablet",
+    name: "Google Pixel Tablet",
+    models: [
+      { id: "pixel-tablet", name: "Pixel Tablet", year: 2023 },
+    ],
+  },
+  {
+    id: "huawei-tablet",
+    name: "Huawei MatePad",
+    models: [
+      { id: "matepad-pro-12.6", name: "MatePad Pro 12.6\"", year: 2021 },
+      { id: "matepad-pro-11", name: "MatePad Pro 11\"", year: 2021 },
+      { id: "matepad-11", name: "MatePad 11", year: 2021 },
+    ],
+  },
+  {
+    id: "lenovo-tablet",
+    name: "Lenovo Tab",
+    models: [
+      { id: "tab-p12-pro", name: "Tab P12 Pro", year: 2021 },
+      { id: "tab-p11-pro", name: "Tab P11 Pro", year: 2021 },
+      { id: "tab-m10-plus", name: "Tab M10 Plus", year: 2020 },
+    ],
+  },
+];
+
 export const repairServices = [
   { id: "screen-repair", name: "Screen Repair", description: "Cracked or broken display replacement" },
   { id: "battery-replacement", name: "Battery Replacement", description: "Low battery life or battery swelling" },
-  { id: "water-damage", name: "Water Damage Repair", description: "Phone exposed to water or liquid" },
+  { id: "water-damage", name: "Water Damage Repair", description: "Device exposed to water or liquid" },
   { id: "charging-port", name: "Charging Port Repair", description: "Charging issues or port damage" },
   { id: "camera-repair", name: "Camera Repair", description: "Camera not working or blurry photos" },
   { id: "speaker-repair", name: "Speaker Repair", description: "Audio issues or no sound" },
   { id: "button-repair", name: "Button Repair", description: "Power, volume, or home button issues" },
-  { id: "software-issue", name: "Software Issues", description: "Phone freezing, crashing, or slow performance" },
+  { id: "software-issue", name: "Software Issues", description: "Device freezing, crashing, or slow performance" },
   { id: "other", name: "Other Issues", description: "Any other repair needs" },
 ];

@@ -16,17 +16,6 @@ export interface ContactInfo {
   phone: string;
   email: string;
   businessHours: BusinessHours[];
-  features: {
-    id: string;
-    title: string;
-    description: string;
-    icon: string;
-    color: string;
-  }[];
-  gettingHere: {
-    id: string;
-    description: string;
-  }[];
   mapEmbed: {
     src: string;
     title: string;
