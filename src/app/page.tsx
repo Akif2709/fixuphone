@@ -84,7 +84,7 @@ export default function Home() {
               At FixUphone, we specialize in professional phone repairs for all major brands. 
               Our certified technicians use only original parts and provide a comprehensive 
               1-year warranty on all repairs. From cracked screens to battery replacements, 
-              we've got you covered with fast, reliable service.
+              we&apos;ve got you covered with fast, reliable service.
             </p>
             
             {/* Features Grid */}

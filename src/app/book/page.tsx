@@ -54,7 +54,7 @@ type BookingFormData = z.infer<typeof bookingSchema>;
 export default function BookPage() {
   const [selectedDeviceType, setSelectedDeviceType] = useState<string>("");
   const [selectedBrand, setSelectedBrand] = useState<string>("");
-  const [selectedModel, setSelectedModel] = useState<string>("");
+  const [, setSelectedModel] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const step2Ref = useRef<HTMLDivElement>(null);
@@ -104,7 +104,7 @@ export default function BookPage() {
   };
 
   // Watch form values to trigger re-renders when validation state changes
-  const watchedValues = form.watch();
+  form.watch();
 
   // Auto-scroll to step 2 when it becomes visible
   useEffect(() => {
@@ -151,9 +151,9 @@ export default function BookPage() {
       const emailSent = await sendBookingConfirmationEmail(emailData);
       
       if (emailSent) {
-        alert(`Booking confirmed! Booking ID: ${bookingId}\n\nA confirmation email has been sent to ${data.email}. We'll contact you soon to confirm your appointment.`);
+        alert(`Booking confirmed! Booking ID: ${bookingId}\n\nA confirmation email has been sent to ${data.email}. We&apos;ll contact you soon to confirm your appointment.`);
       } else {
-        alert(`Booking submitted! Booking ID: ${bookingId}\n\nWe'll contact you soon to confirm your appointment.`);
+        alert(`Booking submitted! Booking ID: ${bookingId}\n\nWe&apos;ll contact you soon to confirm your appointment.`);
       }
       
       // Reset form
