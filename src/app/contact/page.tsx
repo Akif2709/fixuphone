@@ -10,6 +10,7 @@ import {
   Shield, 
   Star
 } from "lucide-react";
+import { contactData } from "@/lib/contact-data";
 
 export default function ContactPage() {
 
@@ -42,9 +43,9 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Bezoek Onze Winkel</h3>
                       <p className="text-gray-600">
-                        Wirixstraat 54<br />
-                        1222 NS Hilversum<br />
-                        Netherlands
+                        {contactData.address.street}<br />
+                        {contactData.address.postalCode} {contactData.address.city}<br />
+                        {contactData.address.country}
                       </p>
                     </div>
                   </div>
@@ -55,7 +56,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Bel Ons</h3>
-                      <p className="text-gray-600">+31 123 456 7890</p>
+                      <p className="text-gray-600">{contactData.phone}</p>
                       <p className="text-sm text-gray-500 mt-1">Beschikbaar tijdens openingstijden</p>
                     </div>
                   </div>
@@ -66,7 +67,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">E-mail Ons</h3>
-                      <p className="text-gray-600">info@fixuphone.nl</p>
+                      <p className="text-gray-600">{contactData.email}</p>
                       <p className="text-sm text-gray-500 mt-1">Wij reageren binnen 24 uur</p>
                     </div>
                   </div>
@@ -78,9 +79,11 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Openingstijden</h3>
                       <div className="text-gray-600 space-y-1">
-                        <p>Maandag - Vrijdag: 9:00 - 18:00</p>
-                        <p>Zaterdag: 10:00 - 16:00</p>
-                        <p>Zondag: Gesloten</p>
+                        {contactData.businessHours.map((schedule, index) => (
+                          <p key={index}>
+                            {schedule.day}: {schedule.isOpen ? schedule.hours : 'Gesloten'}
+                          </p>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -97,7 +100,7 @@ export default function ContactPage() {
                       <Shield className="h-5 w-5 text-green-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">1-Jaar Garantie</h3>
+                      <h3 className="font-semibold text-gray-900">3-Maanden Garantie</h3>
                       <p className="text-sm text-gray-600">Alle reparaties komen met onze uitgebreide garantie</p>
                     </div>
                   </div>
@@ -107,7 +110,7 @@ export default function ContactPage() {
                       <Star className="h-5 w-5 text-yellow-600 mt-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900">Expert Technici</h3>
+                      <h3 className="font-semibold text-gray-900">Ervaren Specialisten</h3>
                       <p className="text-sm text-gray-600">Gecertificeerde professionals met jaren ervaring</p>
                     </div>
                   </div>
@@ -141,14 +144,14 @@ export default function ContactPage() {
                 
                 <div className="aspect-video rounded-lg overflow-hidden">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.1234567890!2d5.1234567!3d52.1234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sWirixstraat%2054%2C%201222%20NS%20Hilversum!5e0!3m2!1sen!2snl!4v1234567890123!5m2!1sen!2snl"
+                    src={contactData.mapEmbed.src}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="FixUphone Location Map"
+                    title={contactData.mapEmbed.title}
                   />
                 </div>
                 

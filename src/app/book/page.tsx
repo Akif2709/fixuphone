@@ -24,20 +24,22 @@ import {
 } from "@/components/ui/form";
 import { phoneBrands, tabletBrands, deviceTypes, repairServices } from "@/lib/phone-data";
 import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/email-service";
+import { getAvailableTimeSlotsForDay } from "@/lib/timeslot-data";
 import { Calendar, Phone, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const bookingSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  deviceType: z.string().min(1, "Please select a device type"),
+  name: z.string().min(2, "Naam moet minimaal 2 karakters bevatten"),
+  email: z.email("Voer een geldig e-mailadres in"),
+  phone: z.string().min(10, "Voer een geldig telefoonnummer in"),
+  deviceType: z.string().min(1, "Selecteer een apparaat type"),
   brand: z.string().optional(),
   model: z.string().optional(),
   deviceDescription: z.string().optional(),
-  service: z.string().min(1, "Please select a repair service"),
+  service: z.string().min(1, "Selecteer een reparatie service"),
   issue: z.string().optional(),
-  preferredDate: z.string().min(1, "Please select a preferred date"),
-  preferredTime: z.string().min(1, "Please select a preferred time"),
+  preferredDate: z.string().min(1, "Selecteer een gewenste datum"),
+  preferredTime: z.string().min(1, "Selecteer een gewenste tijd"),
 }).refine((data) => {
   if (data.deviceType === "other") {
     return data.deviceDescription && data.deviceDescription.length >= 5;
@@ -45,18 +47,26 @@ const bookingSchema = z.object({
     return data.brand && data.model;
   }
 }, {
-  message: "Please provide complete device information",
+  message: "Geef volledige apparaat informatie op",
   path: ["deviceType"]
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookPage() {
+  const router = useRouter();
   const [selectedDeviceType, setSelectedDeviceType] = useState<string>("");
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [, setSelectedModel] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDateObj, setSelectedDateObj] = useState<{
+    date: string;
+    dayId: string;
+    dayName: string;
+    dateFormatted: string;
+  } | null>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
 
   const form = useForm<BookingFormData>({
@@ -100,7 +110,7 @@ export default function BookPage() {
 
   // Check if scheduling section is complete
   const isSchedulingSectionComplete = () => {
-    return form.getValues("preferredDate") && form.getValues("preferredTime");
+    return selectedDate && form.getValues("preferredTime");
   };
 
   // Watch form values to trigger re-renders when validation state changes
@@ -118,11 +128,43 @@ export default function BookPage() {
     }
   }, [currentStep]);
 
-  const timeSlots = [
-    "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-    "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM",
-    "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM"
-  ];
+  // Get available time slots for the selected day
+  const getTimeSlotsForSelectedDay = () => {
+    if (!selectedDateObj) return [];
+    return getAvailableTimeSlotsForDay(selectedDateObj.dayId);
+  };
+
+  // Get available days (next 14 days)
+  const getAvailableDays = () => {
+    const days = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 14; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
+      const dayOfWeek = date.getDay();
+      const dayMapping = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const dayId = dayMapping[dayOfWeek];
+      
+      const timeSlots = getAvailableTimeSlotsForDay(dayId);
+      if (timeSlots.length > 0) {
+        days.push({
+          date: date.toISOString().split('T')[0],
+          dayId,
+          dayName: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'][dayOfWeek],
+          dateFormatted: (() => {
+            const weekday = date.toLocaleDateString('nl-NL', { weekday: 'long' });
+            const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
+            const datePart = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+            return `${capitalizedWeekday} - ${datePart}`;
+          })()
+        });
+      }
+    }
+    
+    return days;
+  };
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
@@ -150,18 +192,27 @@ export default function BookPage() {
       // Send confirmation email
       const emailSent = await sendBookingConfirmationEmail(emailData);
       
-      if (emailSent) {
-        alert(`Boeking bevestigd! Boeking ID: ${bookingId}\n\nEen bevestigingsmail is verzonden naar ${data.email}. Wij nemen binnenkort contact met u op om uw afspraak te bevestigen.`);
-      } else {
-        alert(`Boeking ingediend! Boeking ID: ${bookingId}\n\nWij nemen binnenkort contact met u op om uw afspraak te bevestigen.`);
-      }
+      // Prepare URL parameters for success page
+      const params = new URLSearchParams({
+        bookingId,
+        customerName: data.name,
+        customerEmail: data.email,
+        customerPhone: data.phone,
+        deviceType: data.deviceType,
+        service: data.service,
+        preferredDate: data.preferredDate,
+        preferredTime: data.preferredTime,
+        emailSent: emailSent.toString()
+      });
+
+      // Add optional parameters if they exist
+      if (data.brand) params.append('deviceBrand', data.brand);
+      if (data.model) params.append('deviceModel', data.model);
+      if (data.deviceDescription) params.append('deviceDescription', data.deviceDescription);
+      if (data.issue) params.append('issue', data.issue);
       
-      // Reset form
-      form.reset();
-      setSelectedDeviceType("");
-      setSelectedBrand("");
-      setSelectedModel("");
-      setCurrentStep(1);
+      // Redirect to success page
+      router.push(`/book/success?${params.toString()}`);
       
     } catch (error) {
       console.error("Booking submission error:", error);
@@ -172,11 +223,11 @@ export default function BookPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto pb-8">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Boek Uw Apparaat Reparatie
             </h1>
@@ -188,11 +239,11 @@ export default function BookPage() {
           <div className="max-w-4xl mx-auto">
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 
                 {/* Step 1: Device Information */}
                 {currentStep >= 1 && (
-                  <div className="bg-white rounded-lg shadow-lg p-8">
+                  <div className="bg-white rounded-lg shadow-lg p-6">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <Phone className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 1: Apparaat Informatie
@@ -219,7 +270,7 @@ export default function BookPage() {
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select device type" />
+                                  <SelectValue placeholder="Selecteer apparaat type" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -247,7 +298,7 @@ export default function BookPage() {
                               <FormLabel>Apparaat Beschrijving *</FormLabel>
                               <FormControl>
                                 <Textarea
-                                  placeholder="Please describe your device (e.g., MacBook Pro 13-inch, Apple Watch Series 8, etc.)"
+                                  placeholder="Beschrijf uw apparaat (bijv. MacBook Pro 13-inch, Apple Watch Series 8, etc.)"
                                   className="min-h-[100px]"
                                   {...field}
                                 />
@@ -275,7 +326,7 @@ export default function BookPage() {
                                 >
                                   <FormControl>
                                     <SelectTrigger>
-                                      <SelectValue placeholder="Select brand" />
+                                      <SelectValue placeholder="Selecteer merk" />
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
@@ -304,7 +355,7 @@ export default function BookPage() {
                                 >
                                   <FormControl>
                                     <SelectTrigger>
-                                      <SelectValue placeholder="Select model" />
+                                      <SelectValue placeholder="Selecteer model" />
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
@@ -390,46 +441,67 @@ export default function BookPage() {
                       Stap 2: Afspraak Inplannen
                     </h3>
                     
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="preferredDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Gewenste Datum *</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="preferredTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Gewenste Tijd *</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecteer tijd" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {timeSlots.map((time) => (
-                                  <SelectItem key={time} value={time}>
-                                    {time}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    {/* Day Selection */}
+                    <div className="mb-8">
+                      <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een dag *</FormLabel>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {getAvailableDays().map((day) => (
+                          <button
+                            key={day.date}
+                            type="button"
+                            onClick={() => {
+                              setSelectedDate(day.date);
+                              setSelectedDateObj(day);
+                              form.setValue("preferredDate", day.date);
+                              form.setValue("preferredTime", ""); // Reset time when changing day
+                            }}
+                            className={`p-4 rounded-lg border-2 text-left transition-all ${
+                              selectedDate === day.date
+                                ? 'border-blue-500 bg-blue-50 text-blue-900 shadow-md'
+                                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                            }`}
+                          >
+                            <div className="font-bold text-gray-900">{day.dateFormatted}</div>
+                          </button>
+                        ))}
+                      </div>
+                      {!selectedDateObj && (
+                        <p className="text-sm text-gray-500 mt-2">Kies een dag om beschikbare tijden te zien</p>
+                      )}
                     </div>
+
+                    {/* Time Selection */}
+                    {selectedDateObj && (
+                      <div>
+                        <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een tijd *</FormLabel>
+                        <FormField
+                          control={form.control}
+                          name="preferredTime"
+                          render={({ field }) => (
+                            <FormItem>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecteer tijd" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {getTimeSlotsForSelectedDay().map((slot) => (
+                                    <SelectItem key={slot.id} value={slot.time}>
+                                      {slot.display}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <p className="text-sm text-gray-500 mt-2">
+                          Elke tijdslot is 30 minuten. Kies een tijd die het beste bij u past.
+                        </p>
+                      </div>
+                    )}
 
                     <div className="mt-8 flex justify-end">
                       <Button
@@ -446,7 +518,7 @@ export default function BookPage() {
 
                 {/* Step 3: Personal Information */}
                 {currentStep >= 3 && (
-                  <div className="bg-white rounded-lg shadow-lg p-8">
+                  <div className="bg-white rounded-lg shadow-lg p-6">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <User className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 3: Persoonlijke Informatie
@@ -461,7 +533,7 @@ export default function BookPage() {
                             <FormItem>
                               <FormLabel>Volledige Naam *</FormLabel>
                               <FormControl>
-                                <Input placeholder="John Doe" {...field} />
+                                <Input placeholder="Jan de Vries" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -475,7 +547,7 @@ export default function BookPage() {
                             <FormItem>
                               <FormLabel>E-mailadres *</FormLabel>
                               <FormControl>
-                                <Input type="email" placeholder="john@example.com" {...field} />
+                                <Input type="email" placeholder="jan@voorbeeld.nl" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

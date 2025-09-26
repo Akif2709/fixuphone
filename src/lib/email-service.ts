@@ -1,4 +1,5 @@
 import emailjs from '@emailjs/browser';
+import { contactData } from './contact-data';
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_79rn7rj';
@@ -35,14 +36,14 @@ export const sendBookingConfirmationEmail = async (bookingData: BookingEmailData
       device_model: bookingData.deviceModel || 'N/A',
       device_description: bookingData.deviceDescription || 'N/A',
       service: bookingData.service,
-      issue: bookingData.issue || 'No description provided',
+      issue: bookingData.issue || 'Geen beschrijving opgegeven',
       preferred_date: bookingData.preferredDate,
       preferred_time: bookingData.preferredTime,
       booking_id: bookingData.bookingId,
-      business_name: 'FixUphone',
-      business_email: 'info@fixuphone.nl',
-      business_phone: '+31 123 456 7890',
-      business_address: 'Wirixstraat 54, 1222 NS Hilversum, Netherlands'
+      business_name: contactData.businessName,
+      business_email: contactData.email,
+      business_phone: contactData.phone,
+      business_address: contactData.address.fullAddress
     };
 
     // Send email

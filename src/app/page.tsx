@@ -11,26 +11,27 @@ import {
 } from "@/components/ui/carousel";
 import { Phone, Shield, Clock, Star } from "lucide-react";
 import Link from "next/link";
+import { contactData } from "@/lib/contact-data";
 
 export default function Home() {
   const carouselImages = [
     {
       src: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      alt: "Professional phone repair technician working on iPhone",
-      title: "Expert Phone Repairs",
-      description: "Professional technicians with years of experience"
+      alt: "Professionele telefoonreparatie technicus aan het werk met iPhone",
+      title: "Expert Telefoonreparaties",
+      description: "Professionele specialisten met jarenlange ervaring"
     },
     {
       src: "https://images.unsplash.com/photo-1556656793-08538906a9f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      alt: "High-quality phone screen replacement",
-      title: "Quality Parts & Service",
-      description: "Original parts and comprehensive warranty"
+      alt: "Hoge kwaliteit telefoonscherm vervanging",
+      title: "Kwaliteit Onderdelen & Service",
+      description: "Originele onderdelen en uitgebreide garantie"
     },
     {
       src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80",
-      alt: "Fast and reliable phone repair service",
-      title: "Quick & Reliable",
-      description: "Same-day repairs available for most issues"
+      alt: "Snelle en betrouwbare telefoonreparatie service",
+      title: "Snel & Betrouwbaar",
+      description: "Reparaties op dezelfde dag beschikbaar voor de meeste problemen"
     }
   ];
 
@@ -39,7 +40,7 @@ export default function Home() {
       {/* Hero Section with Carousel */}
       <section className="relative">
         <div className="container mx-auto px-4 py-12">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-full mx-auto">
             <Carousel className="w-full">
               <CarouselContent>
                 {carouselImages.map((image, index) => (
@@ -83,7 +84,7 @@ export default function Home() {
             <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
               Bij FixUphone specialiseren wij ons in professionele telefoonreparaties voor alle grote merken. 
               Onze gecertificeerde technici gebruiken alleen originele onderdelen en bieden een uitgebreide 
-              1-jarige garantie op alle reparaties. Van gebarsten schermen tot batterijvervangingen, 
+              3-maanden garantie op alle reparaties. Van gebarsten schermen tot batterijvervangingen, 
               wij zorgen voor snelle en betrouwbare service.
             </p>
             
@@ -113,7 +114,7 @@ export default function Home() {
                 <div className="bg-green-100 p-4 rounded-full mb-4">
                   <Shield className="h-8 w-8 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">1-Jaar Garantie</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">3-Maanden Garantie</h3>
                 <p className="text-sm text-gray-600 text-center">Uitgebreide dekking op alle reparaties</p>
               </div>
               
@@ -129,7 +130,7 @@ export default function Home() {
                 <div className="bg-purple-100 p-4 rounded-full mb-4">
                   <Star className="h-8 w-8 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Expert Technici</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Ervaren Specialisten</h3>
                 <p className="text-sm text-gray-600 text-center">Gecertificeerde professionals met ervaring</p>
               </div>
             </div>
@@ -146,7 +147,7 @@ export default function Home() {
               Gevestigd in het Hart van Hilversum
             </h3>
             <p className="text-gray-600 mb-6">
-              Bezoek onze winkel aan Wirixstraat 54, slechts 5 minuten lopen vanaf Hilversum Centraal. 
+              Bezoek onze winkel aan {contactData.address.street}, slechts 5 minuten lopen vanaf Hilversum Centraal. 
               Gratis parkeren beschikbaar en gemakkelijk bereikbaar met het openbaar vervoer.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -156,8 +157,8 @@ export default function Home() {
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="tel:+311234567890">
-                  Bel +31 123 456 7890
+                <Link href={`tel:${contactData.phone}`}>
+                  Bel {contactData.phone}
                 </Link>
               </Button>
             </div>

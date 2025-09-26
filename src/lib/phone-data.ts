@@ -4,6 +4,20 @@ export interface PhoneModel {
   year: number;
 }
 
+export interface RepairPrice {
+  service: string;
+  price: number;
+  currency: string;
+  description?: string;
+}
+
+export interface DevicePricing {
+  deviceId: string;
+  deviceName: string;
+  brand: string;
+  prices: RepairPrice[];
+}
+
 export interface PhoneBrand {
   id: string;
   name: string;
@@ -62,36 +76,7 @@ export const phoneBrands: PhoneBrand[] = [
       { id: "galaxy-a34", name: "Galaxy A34", year: 2023 },
     ],
   },
-  {
-    id: "google",
-    name: "Google",
-    models: [
-      { id: "pixel-8-pro", name: "Pixel 8 Pro", year: 2023 },
-      { id: "pixel-8", name: "Pixel 8", year: 2023 },
-      { id: "pixel-7-pro", name: "Pixel 7 Pro", year: 2022 },
-      { id: "pixel-7", name: "Pixel 7", year: 2022 },
-      { id: "pixel-6-pro", name: "Pixel 6 Pro", year: 2021 },
-      { id: "pixel-6", name: "Pixel 6", year: 2021 },
-      { id: "pixel-6a", name: "Pixel 6a", year: 2022 },
-      { id: "pixel-5", name: "Pixel 5", year: 2020 },
-      { id: "pixel-4a", name: "Pixel 4a", year: 2020 },
-    ],
-  },
-  {
-    id: "oneplus",
-    name: "OnePlus",
-    models: [
-      { id: "oneplus-11", name: "OnePlus 11", year: 2023 },
-      { id: "oneplus-10-pro", name: "OnePlus 10 Pro", year: 2022 },
-      { id: "oneplus-10t", name: "OnePlus 10T", year: 2022 },
-      { id: "oneplus-9-pro", name: "OnePlus 9 Pro", year: 2021 },
-      { id: "oneplus-9", name: "OnePlus 9", year: 2021 },
-      { id: "oneplus-8t", name: "OnePlus 8T", year: 2020 },
-      { id: "oneplus-8-pro", name: "OnePlus 8 Pro", year: 2020 },
-      { id: "oneplus-8", name: "OnePlus 8", year: 2020 },
-      { id: "oneplus-nord-3", name: "OnePlus Nord 3", year: 2023 },
-    ],
-  },
+  
   {
     id: "xiaomi",
     name: "Xiaomi",
@@ -118,36 +103,13 @@ export const phoneBrands: PhoneBrand[] = [
       { id: "mate-40-pro", name: "Mate 40 Pro", year: 2020 },
       { id: "nova-11", name: "Nova 11", year: 2023 },
     ],
-  },
-  {
-    id: "oppo",
-    name: "OPPO",
-    models: [
-      { id: "find-x6-pro", name: "Find X6 Pro", year: 2023 },
-      { id: "find-x5-pro", name: "Find X5 Pro", year: 2022 },
-      { id: "find-x3-pro", name: "Find X3 Pro", year: 2021 },
-      { id: "reno-10-pro", name: "Reno 10 Pro", year: 2023 },
-      { id: "reno-9-pro", name: "Reno 9 Pro", year: 2022 },
-      { id: "a78", name: "A78", year: 2023 },
-    ],
-  },
-  {
-    id: "vivo",
-    name: "vivo",
-    models: [
-      { id: "x90-pro", name: "X90 Pro", year: 2023 },
-      { id: "x80-pro", name: "X80 Pro", year: 2022 },
-      { id: "v27-pro", name: "V27 Pro", year: 2023 },
-      { id: "v25-pro", name: "V25 Pro", year: 2022 },
-      { id: "y36", name: "Y36", year: 2023 },
-    ],
-  },
+  }
 ];
 
 export const deviceTypes = [
-  { id: "phone", name: "Phone", description: "Smartphones and mobile phones" },
-  { id: "tablet", name: "Tablet", description: "iPad, Android tablets, and other tablets" },
-  { id: "other", name: "Other Device", description: "Laptops, smartwatches, or other electronic devices" },
+  { id: "phone", name: "Telefoon", description: "Smartphones en mobiele telefoons" },
+  { id: "tablet", name: "Tablet", description: "iPad, Android tablets en andere tablets" },
+  { id: "other", name: "Ander Apparaat", description: "Laptops, smartwatches of andere elektronische apparaten" },
 ];
 
 export const tabletBrands: PhoneBrand[] = [
@@ -209,13 +171,242 @@ export const tabletBrands: PhoneBrand[] = [
 ];
 
 export const repairServices = [
-  { id: "screen-repair", name: "Screen Repair", description: "Cracked or broken display replacement" },
-  { id: "battery-replacement", name: "Battery Replacement", description: "Low battery life or battery swelling" },
-  { id: "water-damage", name: "Water Damage Repair", description: "Device exposed to water or liquid" },
-  { id: "charging-port", name: "Charging Port Repair", description: "Charging issues or port damage" },
-  { id: "camera-repair", name: "Camera Repair", description: "Camera not working or blurry photos" },
-  { id: "speaker-repair", name: "Speaker Repair", description: "Audio issues or no sound" },
-  { id: "button-repair", name: "Button Repair", description: "Power, volume, or home button issues" },
-  { id: "software-issue", name: "Software Issues", description: "Device freezing, crashing, or slow performance" },
-  { id: "other", name: "Other Issues", description: "Any other repair needs" },
+  { id: "screen-repair", name: "Scherm Reparatie", description: "Gebarsten of kapot scherm vervangen" },
+  { id: "battery-replacement", name: "Batterij Vervanging", description: "Lage batterij levensduur of opgezwollen batterij" },
+  { id: "charging-port", name: "Oplaadpoort Reparatie", description: "Oplaadproblemen of poort schade" },
+  { id: "water-damage", name: "Water Schade Reparatie", description: "Apparaat blootgesteld aan water of vloeistof" },
+  { id: "camera-repair", name: "Camera Reparatie", description: "Camera werkt niet of wazige foto's" },
+  { id: "speaker-repair", name: "Speaker Reparatie", description: "Audio problemen of geen geluid" },
+  { id: "button-repair", name: "Knop Reparatie", description: "Aan/uit, volume of home knop problemen" },
+  { id: "software-issue", name: "Software Problemen", description: "Apparaat bevriest, crasht of trage prestaties" },
+  { id: "other", name: "Andere Problemen", description: "Alle andere reparatie behoeften" },
 ];
+
+// ========================================
+// PRICING INFORMATION
+// ========================================
+// Easy to manage pricing for site owners
+// Update prices here when needed
+
+export const devicePricing: DevicePricing[] = [
+  // iPhone Pricing
+  {
+    deviceId: "iphone-15-pro-max",
+    deviceName: "iPhone 15 Pro Max",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 299, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 89, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 149, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 199, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "iphone-15-pro",
+    deviceName: "iPhone 15 Pro",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 279, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 89, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 149, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 199, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "iphone-14-pro-max",
+    deviceName: "iPhone 14 Pro Max",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 269, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 79, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 139, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 189, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 169, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 89, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 69, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "iphone-13-pro-max",
+    deviceName: "iPhone 13 Pro Max",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 249, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 69, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 129, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 179, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "iphone-12-pro-max",
+    deviceName: "iPhone 12 Pro Max",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 229, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 59, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 119, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 169, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 149, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 69, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 49, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "iphone-11-pro-max",
+    deviceName: "iPhone 11 Pro Max",
+    brand: "Apple",
+    prices: [
+      { service: "screen-repair", price: 199, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 49, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 99, currency: "EUR", description: "Lightning port repair" },
+      { service: "water-damage", price: 149, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 129, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 59, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 39, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+
+  // Samsung Galaxy Pricing
+  {
+    deviceId: "galaxy-s24-ultra",
+    deviceName: "Galaxy S24 Ultra",
+    brand: "Samsung",
+    prices: [
+      { service: "screen-repair", price: 279, currency: "EUR", description: "Original Samsung display" },
+      { service: "battery-replacement", price: 89, currency: "EUR", description: "Original Samsung battery" },
+      { service: "charging-port", price: 149, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 199, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "galaxy-s23-ultra",
+    deviceName: "Galaxy S23 Ultra",
+    brand: "Samsung",
+    prices: [
+      { service: "screen-repair", price: 259, currency: "EUR", description: "Original Samsung display" },
+      { service: "battery-replacement", price: 79, currency: "EUR", description: "Original Samsung battery" },
+      { service: "charging-port", price: 139, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 189, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 169, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 89, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 69, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "galaxy-s22-ultra",
+    deviceName: "Galaxy S22 Ultra",
+    brand: "Samsung",
+    prices: [
+      { service: "screen-repair", price: 239, currency: "EUR", description: "Original Samsung display" },
+      { service: "battery-replacement", price: 69, currency: "EUR", description: "Original Samsung battery" },
+      { service: "charging-port", price: 129, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 179, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+
+  // Google Pixel Pricing
+  {
+    deviceId: "pixel-8-pro",
+    deviceName: "Pixel 8 Pro",
+    brand: "Google",
+    prices: [
+      { service: "screen-repair", price: 249, currency: "EUR", description: "Original Google display" },
+      { service: "battery-replacement", price: 79, currency: "EUR", description: "Original Google battery" },
+      { service: "charging-port", price: 129, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 179, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "pixel-7-pro",
+    deviceName: "Pixel 7 Pro",
+    brand: "Google",
+    prices: [
+      { service: "screen-repair", price: 229, currency: "EUR", description: "Original Google display" },
+      { service: "battery-replacement", price: 69, currency: "EUR", description: "Original Google battery" },
+      { service: "charging-port", price: 119, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 169, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 149, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 69, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 49, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+
+  // iPad Pricing
+  {
+    deviceId: "ipad-pro-12.9-6th",
+    deviceName: "iPad Pro 12.9\" (6th generation)",
+    brand: "Apple iPad",
+    prices: [
+      { service: "screen-repair", price: 399, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 129, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 179, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 249, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 199, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 119, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 99, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  },
+  {
+    deviceId: "ipad-pro-11-4th",
+    deviceName: "iPad Pro 11\" (4th generation)",
+    brand: "Apple iPad",
+    prices: [
+      { service: "screen-repair", price: 349, currency: "EUR", description: "Original Apple display" },
+      { service: "battery-replacement", price: 119, currency: "EUR", description: "Original Apple battery" },
+      { service: "charging-port", price: 169, currency: "EUR", description: "USB-C port repair" },
+      { service: "water-damage", price: 229, currency: "EUR", description: "Water damage assessment & repair" },
+      { service: "camera-repair", price: 189, currency: "EUR", description: "Camera module replacement" },
+      { service: "speaker-repair", price: 109, currency: "EUR", description: "Speaker replacement" },
+      { service: "button-repair", price: 89, currency: "EUR", description: "Button replacement" },
+      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" }
+    ]
+  }
+];
+
+// Helper function to get pricing for a specific device
+export function getDevicePricing(deviceId: string): DevicePricing | undefined {
+  return devicePricing.find(device => device.deviceId === deviceId);
+}
+
+// Helper function to get price for a specific service on a device
+export function getServicePrice(deviceId: string, serviceId: string): RepairPrice | undefined {
+  const device = getDevicePricing(deviceId);
+  if (!device) return undefined;
+  
+  return device.prices.find(price => price.service === serviceId);
+}
+
+// Helper function to get all devices with pricing
+export function getAllDevicesWithPricing(): DevicePricing[] {
+  return devicePricing;
+}
