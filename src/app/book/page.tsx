@@ -7,49 +7,41 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { phoneBrands, tabletBrands, deviceTypes, repairServices } from "@/lib/phone-data";
 import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/email-service";
 import { getAvailableTimeSlotsForDay } from "@/lib/timeslot-data";
 import { Calendar, Phone, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const bookingSchema = z.object({
-  name: z.string().min(2, "Naam moet minimaal 2 karakters bevatten"),
-  email: z.email("Voer een geldig e-mailadres in"),
-  phone: z.string().min(10, "Voer een geldig telefoonnummer in"),
-  deviceType: z.string().min(1, "Selecteer een apparaat type"),
-  brand: z.string().optional(),
-  model: z.string().optional(),
-  deviceDescription: z.string().optional(),
-  service: z.string().min(1, "Selecteer een reparatie service"),
-  issue: z.string().optional(),
-  preferredDate: z.string().min(1, "Selecteer een gewenste datum"),
-  preferredTime: z.string().min(1, "Selecteer een gewenste tijd"),
-}).refine((data) => {
-  if (data.deviceType === "other") {
-    return data.deviceDescription && data.deviceDescription.length >= 5;
-  } else {
-    return data.brand && data.model;
-  }
-}, {
-  message: "Geef volledige apparaat informatie op",
-  path: ["deviceType"]
-});
+const bookingSchema = z
+  .object({
+    name: z.string().min(2, "Naam moet minimaal 2 karakters bevatten"),
+    email: z.email("Voer een geldig e-mailadres in"),
+    phone: z.string().min(10, "Voer een geldig telefoonnummer in"),
+    deviceType: z.string().min(1, "Selecteer een apparaat type"),
+    brand: z.string().optional(),
+    model: z.string().optional(),
+    deviceDescription: z.string().optional(),
+    service: z.string().min(1, "Selecteer een reparatie service"),
+    issue: z.string().optional(),
+    preferredDate: z.string().min(1, "Selecteer een gewenste datum"),
+    preferredTime: z.string().min(1, "Selecteer een gewenste tijd"),
+  })
+  .refine(
+    (data) => {
+      if (data.deviceType === "other") {
+        return data.deviceDescription && data.deviceDescription.length >= 5;
+      } else {
+        return data.brand && data.model;
+      }
+    },
+    {
+      message: "Geef volledige apparaat informatie op",
+      path: ["deviceType"],
+    }
+  );
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
@@ -68,6 +60,7 @@ export default function BookPage() {
     dateFormatted: string;
   } | null>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
+  const step3Ref = useRef<HTMLDivElement>(null);
 
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
@@ -86,16 +79,17 @@ export default function BookPage() {
     },
   });
 
-  const selectedBrandData = selectedDeviceType === "phone" 
-    ? phoneBrands.find(brand => brand.id === selectedBrand)
-    : tabletBrands.find(brand => brand.id === selectedBrand);
+  const selectedBrandData =
+    selectedDeviceType === "phone"
+      ? phoneBrands.find((brand) => brand.id === selectedBrand)
+      : tabletBrands.find((brand) => brand.id === selectedBrand);
   const availableModels = selectedBrandData?.models || [];
 
   // Check if device section is complete
   const isDeviceSectionComplete = () => {
     const deviceType = form.getValues("deviceType");
     const service = form.getValues("service");
-    
+
     if (deviceType === "other") {
       const description = form.getValues("deviceDescription");
       const result = !!(description && description.length >= 5 && service);
@@ -120,9 +114,20 @@ export default function BookPage() {
   useEffect(() => {
     if (currentStep >= 2 && step2Ref.current) {
       setTimeout(() => {
-        step2Ref.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
+        step2Ref.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (currentStep >= 3 && step3Ref.current) {
+      setTimeout(() => {
+        step3Ref.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
         });
       }, 100);
     }
@@ -138,41 +143,46 @@ export default function BookPage() {
   const getAvailableDays = () => {
     const days = [];
     const today = new Date();
-    
+
     for (let i = 0; i < 14; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-      
+
       const dayOfWeek = date.getDay();
-      const dayMapping = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+      const dayMapping = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
       const dayId = dayMapping[dayOfWeek];
-      
+
       const timeSlots = getAvailableTimeSlotsForDay(dayId);
       if (timeSlots.length > 0) {
         days.push({
-          date: date.toISOString().split('T')[0],
+          date: date.toISOString().split("T")[0],
           dayId,
-          dayName: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'][dayOfWeek],
+          dayName: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"][dayOfWeek],
           dateFormatted: (() => {
-            const weekday = date.toLocaleDateString('nl-NL', { weekday: 'long' });
+            const weekday = date.toLocaleDateString("nl-NL", {
+              weekday: "long",
+            });
             const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
-            const datePart = date.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+            const datePart = date.toLocaleDateString("nl-NL", {
+              day: "numeric",
+              month: "long",
+            });
             return `${capitalizedWeekday} - ${datePart}`;
-          })()
+          })(),
         });
       }
     }
-    
+
     return days;
   };
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
-    
+
     try {
       // Generate booking ID
       const bookingId = generateBookingId();
-      
+
       // Prepare email data
       const emailData: BookingEmailData = {
         customerName: data.name,
@@ -186,13 +196,13 @@ export default function BookPage() {
         issue: data.issue,
         preferredDate: data.preferredDate,
         preferredTime: data.preferredTime,
-        bookingId: bookingId
+        bookingId: bookingId,
       };
 
       // Send confirmation email
       const emailSent = await sendBookingConfirmationEmail(emailData);
-      
-      // Prepare URL parameters for success page
+
+      // Prepare URL parameters
       const params = new URLSearchParams({
         bookingId,
         customerName: data.name,
@@ -202,18 +212,21 @@ export default function BookPage() {
         service: data.service,
         preferredDate: data.preferredDate,
         preferredTime: data.preferredTime,
-        emailSent: emailSent.toString()
+        emailSent: emailSent.toString(),
       });
 
       // Add optional parameters if they exist
-      if (data.brand) params.append('deviceBrand', data.brand);
-      if (data.model) params.append('deviceModel', data.model);
-      if (data.deviceDescription) params.append('deviceDescription', data.deviceDescription);
-      if (data.issue) params.append('issue', data.issue);
-      
-      // Redirect to success page
-      router.push(`/book/success?${params.toString()}`);
-      
+      if (data.brand) params.append("deviceBrand", data.brand);
+      if (data.model) params.append("deviceModel", data.model);
+      if (data.deviceDescription) params.append("deviceDescription", data.deviceDescription);
+      if (data.issue) params.append("issue", data.issue);
+
+      // Redirect based on email sending result
+      if (emailSent) {
+        router.push(`/book/success?${params.toString()}`);
+      } else {
+        router.push(`/book/error?${params.toString()}`);
+      }
     } catch (error) {
       console.error("Booking submission error:", error);
       alert("Er is een fout opgetreden bij het indienen van uw boeking. Probeer het opnieuw of neem direct contact met ons op.");
@@ -228,19 +241,16 @@ export default function BookPage() {
         <div className="max-w-4xl mx-auto pb-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Boek Uw Apparaat Reparatie
-            </h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Boek Uw Apparaat Reparatie</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Laat uw apparaat repareren door onze expert technici. Vul het onderstaande formulier in en wij nemen binnen 24 uur contact met u op.
+              Laat uw apparaat repareren door onze expert technici. Vul het onderstaande formulier in en wij nemen binnen 24 uur contact met
+              u op.
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto">
-
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                
                 {/* Step 1: Device Information */}
                 {currentStep >= 1 && (
                   <div className="bg-white rounded-lg shadow-lg p-6">
@@ -248,7 +258,7 @@ export default function BookPage() {
                       <Phone className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 1: Apparaat Informatie
                     </h3>
-                    
+
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -307,70 +317,68 @@ export default function BookPage() {
                             </FormItem>
                           )}
                         />
-                      ) : selectedDeviceType && (
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <FormField
-                            control={form.control}
-                            name="brand"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Merk *</FormLabel>
-                                <Select
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                    setSelectedBrand(value);
-                                    setSelectedModel("");
-                                    form.setValue("model", "");
-                                  }}
-                                  value={field.value}
-                                >
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Selecteer merk" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    {(selectedDeviceType === "phone" ? phoneBrands : tabletBrands).map((brand) => (
-                                      <SelectItem key={brand.id} value={brand.id}>
-                                        {brand.name}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="model"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Model *</FormLabel>
-                                <Select
-                                  onValueChange={field.onChange}
-                                  value={field.value}
-                                  disabled={!selectedBrand}
-                                >
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Selecteer model" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    {availableModels.map((model) => (
-                                      <SelectItem key={model.id} value={model.id}>
-                                        {model.name} ({model.year})
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
+                      ) : (
+                        selectedDeviceType && (
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <FormField
+                              control={form.control}
+                              name="brand"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Merk *</FormLabel>
+                                  <Select
+                                    onValueChange={(value) => {
+                                      field.onChange(value);
+                                      setSelectedBrand(value);
+                                      setSelectedModel("");
+                                      form.setValue("model", "");
+                                    }}
+                                    value={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Selecteer merk" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {(selectedDeviceType === "phone" ? phoneBrands : tabletBrands).map((brand) => (
+                                        <SelectItem key={brand.id} value={brand.id}>
+                                          {brand.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="model"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Model *</FormLabel>
+                                  <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBrand}>
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Selecteer model" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {availableModels.map((model) => (
+                                        <SelectItem key={model.id} value={model.id}>
+                                          {model.name} ({model.year})
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        )
                       )}
 
                       <FormField
@@ -400,7 +408,7 @@ export default function BookPage() {
                           </FormItem>
                         )}
                       />
-                      
+
                       <FormField
                         control={form.control}
                         name="issue"
@@ -440,7 +448,7 @@ export default function BookPage() {
                       <Calendar className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 2: Afspraak Inplannen
                     </h3>
-                    
+
                     {/* Day Selection */}
                     <div className="mb-8">
                       <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een dag *</FormLabel>
@@ -457,17 +465,15 @@ export default function BookPage() {
                             }}
                             className={`p-4 rounded-lg border-2 text-left transition-all ${
                               selectedDate === day.date
-                                ? 'border-blue-500 bg-blue-50 text-blue-900 shadow-md'
-                                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                ? "border-blue-500 bg-blue-50 text-blue-900 shadow-md"
+                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                             }`}
                           >
                             <div className="font-bold text-gray-900">{day.dateFormatted}</div>
                           </button>
                         ))}
                       </div>
-                      {!selectedDateObj && (
-                        <p className="text-sm text-gray-500 mt-2">Kies een dag om beschikbare tijden te zien</p>
-                      )}
+                      {!selectedDateObj && <p className="text-sm text-gray-500 mt-2">Kies een dag om beschikbare tijden te zien</p>}
                     </div>
 
                     {/* Time Selection */}
@@ -497,9 +503,7 @@ export default function BookPage() {
                             </FormItem>
                           )}
                         />
-                        <p className="text-sm text-gray-500 mt-2">
-                          Elke tijdslot is 30 minuten. Kies een tijd die het beste bij u past.
-                        </p>
+                        <p className="text-sm text-gray-500 mt-2">Elke tijdslot is 30 minuten. Kies een tijd die het beste bij u past.</p>
                       </div>
                     )}
 
@@ -518,12 +522,12 @@ export default function BookPage() {
 
                 {/* Step 3: Personal Information */}
                 {currentStep >= 3 && (
-                  <div className="bg-white rounded-lg shadow-lg p-6">
+                  <div ref={step3Ref} className="bg-white rounded-lg shadow-lg p-6">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <User className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 3: Persoonlijke Informatie
                     </h3>
-                    
+
                     <div className="space-y-6">
                       <div className="grid md:grid-cols-2 gap-6">
                         <FormField
@@ -539,7 +543,7 @@ export default function BookPage() {
                             </FormItem>
                           )}
                         />
-                        
+
                         <FormField
                           control={form.control}
                           name="email"
@@ -554,7 +558,7 @@ export default function BookPage() {
                           )}
                         />
                       </div>
-                      
+
                       <FormField
                         control={form.control}
                         name="phone"
@@ -571,11 +575,7 @@ export default function BookPage() {
                     </div>
 
                     <div className="mt-8 flex justify-end">
-                      <Button
-                        type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-8"
-                        disabled={isSubmitting}
-                      >
+                      <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8" disabled={isSubmitting}>
                         {isSubmitting ? "Bezig met verzenden..." : "Boek Reparatie Afspraak"}
                       </Button>
                     </div>
@@ -584,8 +584,8 @@ export default function BookPage() {
               </form>
             </Form>
           </div>
-          </div>
         </div>
       </div>
+    </div>
   );
 }

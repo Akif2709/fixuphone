@@ -1,10 +1,10 @@
-import emailjs from '@emailjs/browser';
-import { contactData } from './contact-data';
+import emailjs from "@emailjs/browser";
+import { contactData } from "./contact-data";
 
 // EmailJS configuration
-const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_79rn7rj';
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'your_template_id';
-const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'your_public_key';
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "your_service_id";
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "your_template_id";
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "your_public_key";
 
 export interface BookingEmailData {
   customerName: string;
@@ -32,31 +32,27 @@ export const sendBookingConfirmationEmail = async (bookingData: BookingEmailData
       customer_name: bookingData.customerName,
       customer_phone: bookingData.customerPhone,
       device_type: bookingData.deviceType,
-      device_brand: bookingData.deviceBrand || 'N/A',
-      device_model: bookingData.deviceModel || 'N/A',
-      device_description: bookingData.deviceDescription || 'N/A',
+      device_brand: bookingData.deviceBrand || "N/A",
+      device_model: bookingData.deviceModel || "N/A",
+      device_description: bookingData.deviceDescription || "N/A",
       service: bookingData.service,
-      issue: bookingData.issue || 'Geen beschrijving opgegeven',
+      issue: bookingData.issue || "",
       preferred_date: bookingData.preferredDate,
       preferred_time: bookingData.preferredTime,
       booking_id: bookingData.bookingId,
       business_name: contactData.businessName,
       business_email: contactData.email,
       business_phone: contactData.phone,
-      business_address: contactData.address.fullAddress
+      business_address: contactData.address.fullAddress,
     };
 
     // Send email
-    const response = await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      templateParams
-    );
+    const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
 
-    console.log('Email sent successfully:', response);
+    console.log("Email sent successfully:", response);
     return true;
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error("Failed to send email:", error);
     return false;
   }
 };

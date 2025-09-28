@@ -1,13 +1,13 @@
-# Deployment Guide for FixUphone
+# FixUphone Deployment Guide - Vercel
 
-## 🚀 Quick Deploy Options
+## 🚀 Deploy to Vercel (Recommended)
 
-### Option 1: Vercel (Recommended - Easiest)
+Vercel is the company behind Next.js and offers the best integration for Next.js applications.
 
-Vercel is the company behind Next.js and offers the best integration.
+### Steps:
 
-#### Steps:
 1. **Push to GitHub**:
+
    ```bash
    git add .
    git commit -m "Initial commit"
@@ -34,7 +34,8 @@ Vercel is the company behind Next.js and offers the best integration.
    - Add your domain in Vercel dashboard
    - Update DNS records as instructed
 
-#### Benefits:
+### Benefits:
+
 - ✅ Automatic deployments from GitHub
 - ✅ Free tier with generous limits
 - ✅ Built-in CDN and performance optimization
@@ -43,93 +44,19 @@ Vercel is the company behind Next.js and offers the best integration.
 
 ---
 
-### Option 2: Netlify
-
-Great alternative with excellent form handling.
-
-#### Steps:
-1. **Build the project**:
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Netlify**:
-   - Go to [netlify.com](https://netlify.com)
-   - Drag and drop your `out` folder (if using static export)
-   - Or connect your GitHub repository
-
-3. **Configure Build Settings**:
-   ```
-   Build command: npm run build
-   Publish directory: out (if using static export) or .next
-   ```
-
-4. **Environment Variables**:
-   - Site Settings → Environment Variables
-   - Add your EmailJS configuration
-
-#### Benefits:
-- ✅ Free tier available
-- ✅ Great form handling (can replace EmailJS)
-- ✅ Easy custom domain
-- ✅ Branch previews
-
----
-
-### Option 3: GitHub Pages
-
-Free hosting directly from GitHub.
-
-#### Steps:
-1. **Update next.config.ts**:
-   ```typescript
-   /** @type {import('next').NextConfig} */
-   const nextConfig = {
-     output: 'export',
-     trailingSlash: true,
-     images: {
-       unoptimized: true
-     }
-   }
-   
-   module.exports = nextConfig
-   ```
-
-2. **Add deploy script to package.json**:
-   ```json
-   {
-     "scripts": {
-       "deploy": "next build && next export && touch out/.nojekyll"
-     }
-   }
-   ```
-
-3. **Deploy**:
-   ```bash
-   npm run deploy
-   git add out/
-   git commit -m "Deploy to GitHub Pages"
-   git subtree push --prefix out origin gh-pages
-   ```
-
-4. **Enable GitHub Pages**:
-   - Repository Settings → Pages
-   - Source: Deploy from branch
-   - Branch: gh-pages
-
----
-
 ## 🔧 Pre-Deployment Checklist
 
 ### 1. Update EmailJS Configuration
+
 ```typescript
 // src/lib/email-service.ts
-const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_79rn7rj';
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'your_template_id';
-const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'your_public_key';
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "service_79rn7rj";
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "your_template_id";
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "your_public_key";
 ```
 
 ### 2. Create Environment Variables File
+
 ```bash
 # .env.local
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_79rn7rj
@@ -138,13 +65,16 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
 ### 3. Test Production Build
+
 ```bash
 npm run build
 npm start
 ```
 
 ### 4. Update Contact Information
+
 Make sure all contact details are correct in:
+
 - `src/lib/contact-data.ts`
 - `src/app/contact/page.tsx`
 - `src/app/book/page.tsx`
@@ -154,18 +84,24 @@ Make sure all contact details are correct in:
 ## 🌐 Domain Setup
 
 ### 1. Buy a Domain
+
 Popular registrars:
+
 - Namecheap
 - GoDaddy
 - Google Domains
 - Cloudflare
+- DirectNode
 
 ### 2. Configure DNS
+
 For Vercel/Netlify:
+
 - Add CNAME record: `www` → `your-app.vercel.app`
 - Add A record: `@` → Vercel IP (provided in dashboard)
 
 ### 3. SSL Certificate
+
 - Automatically provided by Vercel/Netlify
 - Free and auto-renewing
 
@@ -174,6 +110,7 @@ For Vercel/Netlify:
 ## 📱 Mobile Optimization
 
 Your site is already mobile-optimized with:
+
 - ✅ Responsive design
 - ✅ Touch-friendly buttons
 - ✅ Mobile-first approach
@@ -184,11 +121,13 @@ Your site is already mobile-optimized with:
 ## 🔍 SEO Optimization
 
 ### 1. Update Metadata
+
 ```typescript
 // src/app/layout.tsx
 export const metadata: Metadata = {
   title: "FixUphone - Professional Phone & Device Repair in Hilversum",
-  description: "Expert phone, tablet, and device repair services in Hilversum. Same-day repairs, 1-year warranty, original parts. Book your repair today!",
+  description:
+    "Expert phone, tablet, and device repair services in Hilversum. Same-day repairs, 1-year warranty, original parts. Book your repair today!",
   keywords: "phone repair, tablet repair, device repair, Hilversum, screen replacement, battery repair",
   openGraph: {
     title: "FixUphone - Professional Device Repair",
@@ -208,6 +147,7 @@ export const metadata: Metadata = {
 ```
 
 ### 2. Add Google Analytics
+
 ```bash
 npm install @next/third-parties
 ```
@@ -236,7 +176,6 @@ export default function RootLayout({
 
 ## 🚀 Quick Start Commands
 
-### For Vercel (Recommended):
 ```bash
 # 1. Push to GitHub
 git add .
@@ -248,21 +187,12 @@ git push origin main
 # 4. Deploy!
 ```
 
-### For Netlify:
-```bash
-# 1. Build project
-npm run build
-
-# 2. Go to netlify.com and drag/drop the build folder
-# 3. Configure environment variables
-# 4. Deploy!
-```
-
 ---
 
 ## 📊 Post-Deployment
 
 ### 1. Test Everything
+
 - [ ] Form submission works
 - [ ] Email confirmation sends
 - [ ] All pages load correctly
@@ -270,11 +200,13 @@ npm run build
 - [ ] Contact information is correct
 
 ### 2. Set Up Monitoring
+
 - Google Analytics
 - Vercel Analytics (if using Vercel)
 - Uptime monitoring
 
 ### 3. SEO Submission
+
 - Google Search Console
 - Bing Webmaster Tools
 - Submit sitemap
@@ -306,6 +238,6 @@ npm run build
    - Verify all CSS imports
 
 ### Support:
+
 - Vercel: [vercel.com/docs](https://vercel.com/docs)
-- Netlify: [docs.netlify.com](https://docs.netlify.com)
 - Next.js: [nextjs.org/docs](https://nextjs.org/docs)

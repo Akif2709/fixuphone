@@ -3,11 +3,13 @@
 ## Option 1: EmailJS (Recommended - No Backend Required)
 
 ### Step 1: Create EmailJS Account
+
 1. Go to [EmailJS.com](https://www.emailjs.com/)
 2. Sign up for a free account
 3. Verify your email address
 
 ### Step 2: Set Up Email Service
+
 1. In EmailJS dashboard, go to "Email Services"
 2. Click "Add New Service"
 3. Choose your email provider (Gmail, Outlook, etc.)
@@ -15,55 +17,38 @@
 5. Note down your **Service ID**service_79rn7rj
 
 ### Step 3: Create Email Template
+
 1. Go to "Email Templates"
 2. Click "Create New Template"
 3. Use this template content:
 
 ```html
-Subject: Booking Confirmation - {{booking_id}}
-
-Dear {{customer_name}},
-
-Thank you for booking your device repair with FixUphone!
-
-Booking Details:
-- Booking ID: {{booking_id}}
-- Device: {{device_type}} - {{device_brand}} {{device_model}}
-- Service: {{service}}
-- Preferred Date: {{preferred_date}}
-- Preferred Time: {{preferred_time}}
-
-{% if issue %}
-Issue Description: {{issue}}
-{% endif %}
-
-We will contact you within 24 hours to confirm your appointment.
-
-Contact Information:
-- Phone: {{business_phone}}
-- Email: {{business_email}}
-- Address: {{business_address}}
-
-Best regards,
-The FixUphone Team
+Subject: Booking Confirmation - {{booking_id}} Dear {{customer_name}}, Thank you for booking your device repair with FixUphone! Booking
+Details: - Booking ID: {{booking_id}} - Device: {{device_type}} - {{device_brand}} {{device_model}} - Service: {{service}} - Preferred Date:
+{{preferred_date}} - Preferred Time: {{preferred_time}} {{#issue}} Probleem beschrijving: {{issue}} {{/issue}} We will contact you within 24
+hours to confirm your appointment. Contact Information: - Phone: {{business_phone}} - Email: {{business_email}} - Address:
+{{business_address}} Best regards, The FixUphone Team
 ```
 
 4. Note down your **Template ID**
 
 ### Step 4: Get Public Key
+
 1. Go to "Account" → "General"
 2. Copy your **Public Key**
 
 ### Step 5: Update Configuration
+
 1. Open `src/lib/email-service.ts`
 2. Replace the placeholder values:
    ```typescript
-   const EMAILJS_SERVICE_ID = 'your_service_id'; // Replace with your Service ID
-   const EMAILJS_TEMPLATE_ID = 'your_template_id'; // Replace with your Template ID
-   const EMAILJS_PUBLIC_KEY = 'your_public_key'; // Replace with your Public Key
+   const EMAILJS_SERVICE_ID = "your_service_id"; // Replace with your Service ID
+   const EMAILJS_TEMPLATE_ID = "your_template_id"; // Replace with your Template ID
+   const EMAILJS_PUBLIC_KEY = "your_public_key"; // Replace with your Public Key
    ```
 
 ### Step 6: Test
+
 1. Submit a test booking
 2. Check if the confirmation email is received
 3. Check browser console for any errors
@@ -82,21 +67,22 @@ If you prefer a backend solution, you can:
    - Nodemailer with SMTP
 
 ### Example API Route Structure:
+
 ```typescript
 // pages/api/send-booking-email.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import sgMail from '@sendgrid/mail';
+import { NextApiRequest, NextApiResponse } from "next";
+import sgMail from "@sendgrid/mail";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   try {
     // Send email using your preferred service
     // Return success/error response
   } catch (error) {
-    res.status(500).json({ message: 'Failed to send email' });
+    res.status(500).json({ message: "Failed to send email" });
   }
 }
 ```
@@ -106,6 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 ## Option 3: Third-Party Form Services
 
 You can also use services like:
+
 - **Formspree**: Simple form handling with email notifications
 - **Netlify Forms**: If hosting on Netlify
 - **Typeform**: Advanced form builder with email integrations

@@ -76,7 +76,7 @@ export const phoneBrands: PhoneBrand[] = [
       { id: "galaxy-a34", name: "Galaxy A34", year: 2023 },
     ],
   },
-  
+
   {
     id: "xiaomi",
     name: "Xiaomi",
@@ -103,7 +103,7 @@ export const phoneBrands: PhoneBrand[] = [
       { id: "mate-40-pro", name: "Mate 40 Pro", year: 2020 },
       { id: "nova-11", name: "Nova 11", year: 2023 },
     ],
-  }
+  },
 ];
 
 export const deviceTypes = [
@@ -117,13 +117,13 @@ export const tabletBrands: PhoneBrand[] = [
     id: "apple-tablet",
     name: "Apple iPad",
     models: [
-      { id: "ipad-pro-12.9-6th", name: "iPad Pro 12.9\" (6th generation)", year: 2022 },
-      { id: "ipad-pro-11-4th", name: "iPad Pro 11\" (4th generation)", year: 2022 },
+      { id: "ipad-pro-12.9-6th", name: 'iPad Pro 12.9" (6th generation)', year: 2022 },
+      { id: "ipad-pro-11-4th", name: 'iPad Pro 11" (4th generation)', year: 2022 },
       { id: "ipad-air-5th", name: "iPad Air (5th generation)", year: 2022 },
       { id: "ipad-10th", name: "iPad (10th generation)", year: 2022 },
       { id: "ipad-mini-6th", name: "iPad mini (6th generation)", year: 2021 },
-      { id: "ipad-pro-12.9-5th", name: "iPad Pro 12.9\" (5th generation)", year: 2021 },
-      { id: "ipad-pro-11-3rd", name: "iPad Pro 11\" (3rd generation)", year: 2021 },
+      { id: "ipad-pro-12.9-5th", name: 'iPad Pro 12.9" (5th generation)', year: 2021 },
+      { id: "ipad-pro-11-3rd", name: 'iPad Pro 11" (3rd generation)', year: 2021 },
       { id: "ipad-air-4th", name: "iPad Air (4th generation)", year: 2020 },
       { id: "ipad-9th", name: "iPad (9th generation)", year: 2021 },
       { id: "ipad-8th", name: "iPad (8th generation)", year: 2020 },
@@ -146,16 +146,14 @@ export const tabletBrands: PhoneBrand[] = [
   {
     id: "google-tablet",
     name: "Google Pixel Tablet",
-    models: [
-      { id: "pixel-tablet", name: "Pixel Tablet", year: 2023 },
-    ],
+    models: [{ id: "pixel-tablet", name: "Pixel Tablet", year: 2023 }],
   },
   {
     id: "huawei-tablet",
     name: "Huawei MatePad",
     models: [
-      { id: "matepad-pro-12.6", name: "MatePad Pro 12.6\"", year: 2021 },
-      { id: "matepad-pro-11", name: "MatePad Pro 11\"", year: 2021 },
+      { id: "matepad-pro-12.6", name: 'MatePad Pro 12.6"', year: 2021 },
+      { id: "matepad-pro-11", name: 'MatePad Pro 11"', year: 2021 },
       { id: "matepad-11", name: "MatePad 11", year: 2021 },
     ],
   },
@@ -202,8 +200,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "iphone-15-pro",
@@ -217,8 +215,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "iphone-14-pro-max",
@@ -232,8 +230,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 169, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 89, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 69, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "iphone-13-pro-max",
@@ -247,8 +245,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "iphone-12-pro-max",
@@ -262,8 +260,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 149, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 69, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 49, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "iphone-11-pro-max",
@@ -277,8 +275,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 129, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 59, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 39, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
 
   // Samsung Galaxy Pricing
@@ -294,8 +292,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 179, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 99, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 79, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "galaxy-s23-ultra",
@@ -309,8 +307,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 169, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 89, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 69, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "galaxy-s22-ultra",
@@ -324,8 +322,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
 
   // Google Pixel Pricing
@@ -341,8 +339,8 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 159, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 79, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 59, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 49, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "pixel-7-pro",
@@ -356,14 +354,14 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 149, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 69, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 49, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 39, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
 
   // iPad Pricing
   {
     deviceId: "ipad-pro-12.9-6th",
-    deviceName: "iPad Pro 12.9\" (6th generation)",
+    deviceName: 'iPad Pro 12.9" (6th generation)',
     brand: "Apple iPad",
     prices: [
       { service: "screen-repair", price: 399, currency: "EUR", description: "Original Apple display" },
@@ -373,12 +371,12 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 199, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 119, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 99, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" }
-    ]
+      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" },
+    ],
   },
   {
     deviceId: "ipad-pro-11-4th",
-    deviceName: "iPad Pro 11\" (4th generation)",
+    deviceName: 'iPad Pro 11" (4th generation)',
     brand: "Apple iPad",
     prices: [
       { service: "screen-repair", price: 349, currency: "EUR", description: "Original Apple display" },
@@ -388,22 +386,22 @@ export const devicePricing: DevicePricing[] = [
       { service: "camera-repair", price: 189, currency: "EUR", description: "Camera module replacement" },
       { service: "speaker-repair", price: 109, currency: "EUR", description: "Speaker replacement" },
       { service: "button-repair", price: 89, currency: "EUR", description: "Button replacement" },
-      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" }
-    ]
-  }
+      { service: "software-issue", price: 59, currency: "EUR", description: "Software troubleshooting" },
+    ],
+  },
 ];
 
 // Helper function to get pricing for a specific device
 export function getDevicePricing(deviceId: string): DevicePricing | undefined {
-  return devicePricing.find(device => device.deviceId === deviceId);
+  return devicePricing.find((device) => device.deviceId === deviceId);
 }
 
 // Helper function to get price for a specific service on a device
 export function getServicePrice(deviceId: string, serviceId: string): RepairPrice | undefined {
   const device = getDevicePricing(deviceId);
   if (!device) return undefined;
-  
-  return device.prices.find(price => price.service === serviceId);
+
+  return device.prices.find((price) => price.service === serviceId);
 }
 
 // Helper function to get all devices with pricing
