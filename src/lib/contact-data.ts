@@ -32,8 +32,8 @@ export const contactData: ContactInfo = {
     country: "Netherlands",
     fullAddress: "Larenseweg 30, 1221CN Hilversum, Netherlands",
   },
-  phone: "+31 6 687715368",
-  whatsapp: "+31 6 687715368",
+  phone: "+31 6 87715368",
+  whatsapp: "+31 6 87715368",
   email: "info@fixuphone.nl",
   businessHours: [
     {
@@ -42,8 +42,8 @@ export const contactData: ContactInfo = {
       isOpen: true,
     },
     {
-      day: "Zaterdag",
-      hours: "10:00 - 16:00",
+      day: "Woensdag, Zaterdag",
+      hours: "10:00 - 17:00",
       isOpen: true,
     },
     {
