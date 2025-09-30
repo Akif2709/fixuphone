@@ -90,75 +90,59 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "FixUphone",
-    description: "Professionele telefoon en tablet reparaties in Hilversum",
-    url: "https://fixuphone.nl",
-    telephone: "+31 6 687715368",
-    email: "info@fixuphone.nl",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Larenseweg 30",
-      postalCode: "1221CN",
-      addressLocality: "Hilversum",
-      addressCountry: "NL",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: "52.2230",
-      longitude: "5.1764",
-    },
-    openingHours: ["Mo,Tu,Th,Fr 18:00-20:00", "Sa 10:00-16:00"],
-    priceRange: "€€",
-    paymentAccepted: "Cash, Credit Card, Bank Transfer",
-    currenciesAccepted: "EUR",
-    serviceArea: {
-      "@type": "GeoCircle",
-      geoMidpoint: {
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: "FixUphone",
+      description: "Professionele telefoon en tablet reparaties in Hilversum",
+      url: "https://fixuphone.nl",
+      telephone: "+31 6 687715368",
+      email: "info@fixuphone.nl",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Larenseweg 30",
+        postalCode: "1221CN",
+        addressLocality: "Hilversum",
+        addressCountry: "NL",
+      },
+      geo: {
         "@type": "GeoCoordinates",
         latitude: "52.2230",
         longitude: "5.1764",
       },
-      geoRadius: "25000",
+      priceRange: "€",
+      paymentAccepted: "Cash, Credit Card, Bank Transfer",
+      currenciesAccepted: "EUR",
+      serviceArea: {
+        "@type": "GeoCircle",
+        geoMidpoint: {
+          "@type": "GeoCoordinates",
+          latitude: "52.2230",
+          longitude: "5.1764",
+        },
+        geoRadius: "25000",
+      },
     },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Telefoonreparatie Services",
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
       itemListElement: [
         {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: "Scherm Reparatie",
-            description: "Professionele scherm reparatie voor alle telefoon merken",
-          },
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://fixuphone.nl",
         },
         {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: "Batterij Vervanging",
-            description: "Batterij vervanging voor langere levensduur",
-          },
-        },
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: "Water Schade Reparatie",
-            description: "Water schade reparatie en droog behandeling",
-          },
+          "@type": "ListItem",
+          position: 2,
+          name: "Boek Reparatie",
+          item: "https://fixuphone.nl/book",
         },
       ],
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "127",
-    },
-  };
+  ];
 
   return (
     <html lang="nl">
