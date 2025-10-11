@@ -1,17 +1,26 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
-import { contactData } from "@/lib/contact-data";
+import { useContactInfo } from "@/hooks/use-contact-info";
 
 export function WhatsAppButton() {
+  const { contactInfo, loading } = useContactInfo();
+
   const handleWhatsAppClick = () => {
+    if (!contactInfo?.whatsapp) return;
+    
     // Remove spaces and + from the WhatsApp number for the URL
-    const phoneNumber = contactData.whatsapp.replace(/\s+/g, "").replace("+", "");
+    const phoneNumber = contactInfo.whatsapp.replace(/\s+/g, "").replace("+", "");
     const message = "Hallo! Ik heb een vraag over telefoonreparatie.";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, "_blank");
   };
+
+  // Don't render if loading or no contact info
+  if (loading || !contactInfo?.whatsapp) {
+    return null;
+  }
 
   return (
     <button

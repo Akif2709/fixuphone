@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Phone, Shield, Clock, Star } from "lucide-react";
 import Link from "next/link";
-import { contactData } from "@/lib/contact-data";
+import { useContactInfo } from "@/hooks/use-contact-info";
 import Image from "next/image";
 
 export default function Home() {
+  const { contactInfo } = useContactInfo();
   const carouselImages = [
     {
       src: "/carousel-1.jpg",
@@ -123,16 +124,24 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Gevestigd in het Hart van Hilversum</h3>
             <p className="text-gray-600 mb-6">
-              Bezoek onze winkel aan {contactData.address.street}, slechts 5 minuten lopen vanaf Hilversum Centraal. Gratis parkeren
-              beschikbaar en gemakkelijk bereikbaar met het openbaar vervoer.
+              {contactInfo ? (
+                <>
+                  Bezoek onze winkel aan {contactInfo.address.street}, slechts 5 minuten lopen vanaf Hilversum Centraal. Gratis parkeren
+                  beschikbaar en gemakkelijk bereikbaar met het openbaar vervoer.
+                </>
+              ) : (
+                "Bezoek onze winkel in het hart van Hilversum. Gratis parkeren beschikbaar en gemakkelijk bereikbaar met het openbaar vervoer."
+              )}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="outline">
                 <Link href="/contact">Bezoek Onze Winkel</Link>
               </Button>
-              <Button asChild variant="outline">
-                <Link href={`tel:${contactData.phone}`}>Bel {contactData.phone}</Link>
-              </Button>
+              {contactInfo?.phone && (
+                <Button asChild variant="outline">
+                  <Link href={`tel:${contactInfo.phone}`}>Bel {contactInfo.phone}</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

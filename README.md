@@ -1,5 +1,20 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 🔒 Security First!
+
+**Before you start**, please read [SECURITY.md](./SECURITY.md) for important security guidelines.
+
+### Quick Setup
+
+1. Copy the environment variables example:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Fill in your actual credentials in `.env.local`
+
+3. **NEVER commit `.env.local` to version control!**
+
 ## Getting Started
 
 First, run the development server:

@@ -4,14 +4,56 @@
 
 ### 1. EmailJS Configuration
 
-These are the **ONLY** environment variables you need to set in Plesk:
+### 2. MongoDB Configuration
+
+**⚠️ SECURITY CRITICAL: Never commit MongoDB credentials to code!**
+
+These are the environment variables you need to set in Plesk:
 
 ```bash
 NODE_ENV=production
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id_here
 NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id_here
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key_here
+MONGODB_URI=your_mongodb_connection_string_here
+MONGODB_DB_NAME=fixuphone
+JWT_SECRET=your_secure_jwt_secret_here
 ```
+
+### 🔒 **Security Best Practices**
+
+#### ✅ **DO:**
+- Store MongoDB URI in environment variables
+- Use `.env.local` for local development
+- Set environment variables in Plesk for production
+- Never commit `.env` files to Git
+- Use strong, unique database passwords
+
+#### ❌ **DON'T:**
+- Hardcode MongoDB credentials in source code
+- Commit `.env` files to version control
+- Share database credentials in plain text
+- Use weak or default passwords
+
+## MongoDB Configuration
+
+### MongoDB Atlas Setup
+
+Configure your MongoDB Atlas connection with:
+- **Database Name**: fixuphone
+- **Connection String**: Use your own MongoDB Atlas connection string
+
+### Environment Variables for MongoDB
+
+| Variable Name | Value | Description |
+|---------------|-------|-------------|
+| `MONGODB_URI` | `your_mongodb_connection_string_here` | MongoDB Atlas connection string |
+| `MONGODB_DB_NAME` | `fixuphone` | Database name for the application |
+| `JWT_SECRET` | `your_secure_jwt_secret_here` | Secret key for JWT authentication |
+
+### Testing MongoDB Connection
+
+You can test the MongoDB connection by creating a simple API endpoint or using the test function in the connection file.
 
 ## How to Get EmailJS Credentials
 

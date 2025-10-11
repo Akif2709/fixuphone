@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/book/success", "/book/error"],
+      disallow: ["/api/", "/book/success", "/book/error", "/_next/", "/admin/", "/private/"],
     },
     sitemap: "https://fixuphone.nl/sitemap.xml",
   };

@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { phoneBrands, tabletBrands, deviceTypes, repairServices } from "@/lib/phone-data";
 import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/email-service";
-import { getAvailableTimeSlotsForDay } from "@/lib/timeslot-data";
+import { getAvailableTimeSlotsForDay } from "@/lib/utils/timeslot-utils";
+import { useContactInfo } from "@/hooks/use-contact-info";
 import { Calendar, Phone, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -47,6 +48,7 @@ type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookPage() {
   const router = useRouter();
+  const { contactInfo, loading: contactLoading } = useContactInfo();
   const [selectedDeviceType, setSelectedDeviceType] = useState<string>("");
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [, setSelectedModel] = useState<string>("");
@@ -135,8 +137,8 @@ export default function BookPage() {
 
   // Get available time slots for the selected day
   const getTimeSlotsForSelectedDay = () => {
-    if (!selectedDateObj) return [];
-    return getAvailableTimeSlotsForDay(selectedDateObj.dayId);
+    if (!selectedDateObj || !contactInfo?.businessHours) return [];
+    return getAvailableTimeSlotsForDay(selectedDateObj.dayId, contactInfo.businessHours);
   };
 
   // Get available days (next 14 days)
@@ -152,7 +154,7 @@ export default function BookPage() {
       const dayMapping = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
       const dayId = dayMapping[dayOfWeek];
 
-      const timeSlots = getAvailableTimeSlotsForDay(dayId);
+      const timeSlots = contactInfo?.businessHours ? getAvailableTimeSlotsForDay(dayId, contactInfo.businessHours) : [];
       if (timeSlots.length > 0) {
         days.push({
           date: date.toISOString().split("T")[0],
@@ -234,6 +236,22 @@ export default function BookPage() {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading state while contact info is being fetched
+  if (contactLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto pb-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading booking system...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">

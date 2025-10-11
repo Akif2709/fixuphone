@@ -1,5 +1,5 @@
 import emailjs from "@emailjs/browser";
-import { contactData } from "./contact-data";
+import { getContactInfo } from "./database-actions";
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "your_service_id";
@@ -23,6 +23,15 @@ export interface BookingEmailData {
 
 export const sendBookingConfirmationEmail = async (bookingData: BookingEmailData): Promise<boolean> => {
   try {
+    // Get contact info from database
+    const contactResult = await getContactInfo();
+    if (!contactResult.success || !contactResult.data) {
+      console.error("Failed to get contact info for email:", contactResult);
+      return false;
+    }
+
+    const contactInfo = contactResult.data;
+
     // Initialize EmailJS
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
@@ -40,10 +49,10 @@ export const sendBookingConfirmationEmail = async (bookingData: BookingEmailData
       preferred_date: bookingData.preferredDate,
       preferred_time: bookingData.preferredTime,
       booking_id: bookingData.bookingId,
-      business_name: contactData.businessName,
-      business_email: contactData.email,
-      business_phone: contactData.phone,
-      business_address: contactData.address.fullAddress,
+      business_name: contactInfo.businessName,
+      business_email: contactInfo.email,
+      business_phone: contactInfo.phone,
+      business_address: contactInfo.address.fullAddress,
     };
 
     // Send email

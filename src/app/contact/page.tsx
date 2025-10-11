@@ -1,9 +1,42 @@
 "use client";
 
 import { MapPin, Phone, Mail, Clock, Car, Wifi, Shield, Star } from "lucide-react";
-import { contactData } from "@/lib/contact-data";
+import { useContactInfo } from "@/hooks/use-contact-info";
 
 export default function ContactPage() {
+  const { contactInfo, loading, error } = useContactInfo();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading contact information...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !contactInfo) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Information Unavailable</h1>
+              <p className="text-xl text-gray-600">
+                {error || "Unable to load contact information. Please try again later."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
       <div className="container mx-auto px-4">
@@ -31,11 +64,11 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Bezoek Onze Winkel</h3>
                       <p className="text-gray-600">
-                        {contactData.address.street}
+                        {contactInfo.address.street}
                         <br />
-                        {contactData.address.postalCode} {contactData.address.city}
+                        {contactInfo.address.postalCode} {contactInfo.address.city}
                         <br />
-                        {contactData.address.country}
+                        {contactInfo.address.country}
                       </p>
                     </div>
                   </div>
@@ -46,7 +79,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Bel Ons</h3>
-                      <p className="text-gray-600">{contactData.phone}</p>
+                      <p className="text-gray-600">{contactInfo.phone}</p>
                       <p className="text-sm text-gray-500 mt-1">Beschikbaar tijdens openingstijden</p>
                     </div>
                   </div>
@@ -57,7 +90,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">E-mail Ons</h3>
-                      <p className="text-gray-600">{contactData.email}</p>
+                      <p className="text-gray-600">{contactInfo.email}</p>
                       <p className="text-sm text-gray-500 mt-1">Wij reageren binnen 24 uur</p>
                     </div>
                   </div>
@@ -69,9 +102,9 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Openingstijden</h3>
                       <div className="text-gray-600 space-y-1">
-                        {contactData.businessHours.map((schedule, index) => (
+                        {contactInfo.businessHours.map((schedule, index) => (
                           <p key={index}>
-                            {schedule.day}: {schedule.isOpen ? schedule.hours : "Gesloten"}
+                            {schedule.day}: {schedule.isOpen ? `${schedule.openTime} - ${schedule.closeTime}` : "Gesloten"}
                           </p>
                         ))}
                       </div>
@@ -134,14 +167,14 @@ export default function ContactPage() {
 
               <div className="aspect-video rounded-lg overflow-hidden">
                 <iframe
-                  src={contactData.mapEmbed.src}
+                  src={contactInfo.mapEmbed.src}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title={contactData.mapEmbed.title}
+                  title={contactInfo.mapEmbed.title}
                 />
               </div>
 
