@@ -5,12 +5,29 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
+
+// Check if we're in a serverless/edge environment
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+
 const options = {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
   },
+  // Connection pool settings - smaller for serverless
+  maxPoolSize: isServerless ? 1 : 10,
+  minPoolSize: isServerless ? 0 : 2,
+  // Timeout settings
+  connectTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  // Retry settings
+  retryWrites: true,
+  retryReads: true,
+  ssl: true,
+  tls: true,
+  tlsAllowInvalidCertificates: false, // Don't use true in production
 };
 
 let client: MongoClient;
