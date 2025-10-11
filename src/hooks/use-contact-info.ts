@@ -20,12 +20,18 @@ export function useContactInfo() {
         if (result.success) {
           if (result.data) {
             setContactInfo(result.data);
+          } else {
+            console.error('Contact info fetch succeeded but no data returned');
+            setError("Contact data is empty");
           }
         } else {
+          console.error('Contact info fetch failed:', result.error);
           setError(result.error || "Failed to fetch contact information");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unexpected error occurred");
+        console.error('Contact info fetch exception:', err);
+        const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

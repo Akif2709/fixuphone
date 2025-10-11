@@ -16,22 +16,28 @@ const options = {
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
+// Use global variable for both dev and production to cache connection
+const globalWithMongo = global as typeof globalThis & {
+  _mongoClientPromise?: Promise<MongoClient>;
+};
+
 if (process.env.NODE_ENV === "development") {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  const globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
-
   if (!globalWithMongo._mongoClientPromise) {
     client = new MongoClient(uri, options);
     globalWithMongo._mongoClientPromise = client.connect();
   }
   clientPromise = globalWithMongo._mongoClientPromise;
 } else {
-  // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+  // In production mode, also use global variable to cache connection
+  // This prevents "too many connections" errors in serverless environments
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options);
+    globalWithMongo._mongoClientPromise = client.connect();
+    console.log('🔌 MongoDB connection initialized in production');
+  }
+  clientPromise = globalWithMongo._mongoClientPromise;
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
@@ -40,8 +46,14 @@ export default clientPromise;
 
 // Helper function to get database instance
 export async function getDatabase(): Promise<Db> {
-  const client = await clientPromise;
-  return client.db(process.env.MONGODB_DB_NAME || "cluster0");
+  try {
+    const client = await clientPromise;
+    const dbName = process.env.MONGODB_DB_NAME || "fixuphone";
+    return client.db(dbName);
+  } catch (error) {
+    console.error('❌ Failed to connect to MongoDB:', error);
+    throw new Error(`Database connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 // Helper function to test the connection
