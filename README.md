@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ### Quick Setup
 
 1. Copy the environment variables example:
+
    ```bash
    cp .env.example .env.local
    ```

@@ -1,5 +1,5 @@
 import emailjs from "@emailjs/browser";
-import { getContactInfo } from "./database-actions";
+import { getContactInfo } from "../database-actions";
 
 // EmailJS configuration
 const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "your_service_id";

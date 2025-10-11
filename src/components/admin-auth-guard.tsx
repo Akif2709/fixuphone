@@ -17,7 +17,7 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     const checkAuth = async () => {
       try {
         const result = await verifyAdminAuth();
-        
+
         if (result.success) {
           setIsAuthenticated(true);
         } else {

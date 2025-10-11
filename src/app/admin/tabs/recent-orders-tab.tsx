@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import type { RepairOrderStatus } from '@/types';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { RepairOrderStatus } from "@/types";
 
 interface RepairOrder {
   _id?: string;
@@ -35,11 +35,11 @@ interface RecentOrdersTabProps {
 export function RecentOrdersTab({ repairOrders }: RecentOrdersTabProps) {
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pending', variant: 'secondary' as const },
-      confirmed: { label: 'Confirmed', variant: 'default' as const },
-      in_progress: { label: 'In Progress', variant: 'default' as const },
-      completed: { label: 'Completed', variant: 'default' as const },
-      cancelled: { label: 'Cancelled', variant: 'destructive' as const },
+      pending: { label: "Pending", variant: "secondary" as const },
+      confirmed: { label: "Confirmed", variant: "default" as const },
+      in_progress: { label: "In Progress", variant: "default" as const },
+      completed: { label: "Completed", variant: "default" as const },
+      cancelled: { label: "Cancelled", variant: "destructive" as const },
     };
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
@@ -50,9 +50,7 @@ export function RecentOrdersTab({ repairOrders }: RecentOrdersTabProps) {
     <Card>
       <CardHeader>
         <CardTitle>Recent Repair Orders</CardTitle>
-        <CardDescription>
-          Latest repair orders and their status
-        </CardDescription>
+        <CardDescription>Latest repair orders and their status</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -69,24 +67,20 @@ export function RecentOrdersTab({ repairOrders }: RecentOrdersTabProps) {
                     <p className="text-sm font-medium">
                       {order.deviceModel?.brand?.name} {order.deviceModel?.name}
                     </p>
-                    <p className="text-sm text-gray-600">
-                      {order.repairService?.repairType?.name}
-                    </p>
+                    <p className="text-sm text-gray-600">{order.repairService?.repairType?.name}</p>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <p className="font-medium">€{order.repairCost.toFixed(2)}</p>
-                  <p className="text-sm text-gray-600">
-                    {new Date(order.orderDate).toLocaleDateString()}
-                  </p>
+                  <p className="text-sm text-gray-600">{new Date(order.orderDate).toLocaleDateString()}</p>
                 </div>
                 {getStatusBadge(order.status)}
               </div>
             </div>
           ))}
-          
+
           {repairOrders.length === 0 && (
             <div className="text-center py-12 text-gray-500">
               <p className="text-lg">No repair orders found</p>

@@ -1,4 +1,4 @@
-import { TimeSlot, DayTimeSlots, BusinessHours } from '../../types/timeslot-types';
+import { TimeSlot, DayTimeSlots, BusinessHours } from "../../types/timeslot-types";
 
 // Format time for display (Dutch format)
 function formatTimeForDisplay(hour: number, minute: number): string {

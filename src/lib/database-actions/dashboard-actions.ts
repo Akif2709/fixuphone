@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import { RepairOrderModel } from '../../db/models/RepairOrder';
-import { getAllBrands } from './brand-actions';
-import { getDeviceModelsWithBrands } from './device-model-actions';
-import { getRepairServicesWithDeviceModels } from './repair-service-actions';
-import { getAllRepairOrdersWithRelations } from './repair-order-actions';
+import { RepairOrderModel } from "../../db/models/RepairOrder";
+import { getAllBrands } from "./brand-actions";
+import { getDeviceModelsWithBrands } from "./device-model-actions";
+import { getRepairServicesWithDeviceModels } from "./repair-service-actions";
+import { getAllRepairOrdersWithRelations } from "./repair-order-actions";
 
 // ==================== STATISTICS ====================
 
@@ -13,8 +13,8 @@ export async function getRepairOrderStats() {
     const stats = await RepairOrderModel.getStats();
     return { success: true, data: stats };
   } catch (error) {
-    console.error('Error fetching repair order statistics:', error);
-    return { success: false, error: 'Failed to fetch repair order statistics' };
+    console.error("Error fetching repair order statistics:", error);
+    return { success: false, error: "Failed to fetch repair order statistics" };
   }
 }
 
@@ -27,7 +27,7 @@ export async function getDashboardData() {
       getDeviceModelsWithBrands(),
       getRepairServicesWithDeviceModels(),
       getAllRepairOrdersWithRelations(),
-      getRepairOrderStats()
+      getRepairOrderStats(),
     ]);
 
     return {
@@ -37,11 +37,11 @@ export async function getDashboardData() {
         deviceModels: deviceModelsResult.success ? deviceModelsResult.data : [],
         repairServices: repairServicesResult.success ? repairServicesResult.data : [],
         repairOrders: repairOrdersResult.success ? repairOrdersResult.data : [],
-        stats: statsResult.success ? statsResult.data : null
-      }
+        stats: statsResult.success ? statsResult.data : null,
+      },
     };
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    return { success: false, error: 'Failed to fetch dashboard data' };
+    console.error("Error fetching dashboard data:", error);
+    return { success: false, error: "Failed to fetch dashboard data" };
   }
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { getContactInfo } from '@/lib/database-actions';
-import { SerializedContactInfo } from '@/types';
+import { useState, useEffect } from "react";
+import { getContactInfo } from "@/lib/database-actions";
+import { SerializedContactInfo } from "@/types";
 
 export function useContactInfo() {
   const [contactInfo, setContactInfo] = useState<SerializedContactInfo | null>(null);
@@ -14,16 +14,18 @@ export function useContactInfo() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const result = await getContactInfo();
-        
-        if (result.success && result.data) {
-          setContactInfo(result.data);
+
+        if (result.success) {
+          if (result.data) {
+            setContactInfo(result.data);
+          }
         } else {
-          setError(result.error || 'Failed to fetch contact information');
+          setError(result.error || "Failed to fetch contact information");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+        setError(err instanceof Error ? err.message : "An unexpected error occurred");
       } finally {
         setLoading(false);
       }

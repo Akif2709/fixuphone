@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { phoneBrands, tabletBrands, deviceTypes, repairServices } from "@/lib/phone-data";
-import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/email-service";
+import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/services/email-service";
 import { getAvailableTimeSlotsForDay } from "@/lib/utils/timeslot-utils";
 import { useContactInfo } from "@/hooks/use-contact-info";
 import { Calendar, Phone, User } from "lucide-react";

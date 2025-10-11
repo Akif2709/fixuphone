@@ -8,7 +8,7 @@ export function WhatsAppButton() {
 
   const handleWhatsAppClick = () => {
     if (!contactInfo?.whatsapp) return;
-    
+
     // Remove spaces and + from the WhatsApp number for the URL
     const phoneNumber = contactInfo.whatsapp.replace(/\s+/g, "").replace("+", "");
     const message = "Hallo! Ik heb een vraag over telefoonreparatie.";

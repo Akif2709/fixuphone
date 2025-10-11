@@ -1,6 +1,6 @@
-import { getDatabase } from '../connection';
-import { ObjectId } from 'mongodb';
-import bcrypt from 'bcryptjs';
+import { getDatabase } from "../connection";
+import { ObjectId } from "mongodb";
+import bcrypt from "bcryptjs";
 
 export interface Admin {
   _id?: ObjectId;
@@ -19,7 +19,7 @@ export interface CreateAdminRequest {
 }
 
 export class AdminModel {
-  private static collectionName = 'admins';
+  private static collectionName = "admins";
 
   /**
    * Get the database collection
@@ -34,11 +34,11 @@ export class AdminModel {
    */
   static async create(data: CreateAdminRequest): Promise<Admin> {
     const collection = await this.getCollection();
-    
+
     // Check if admin already exists
     const existingAdmin = await collection.findOne({ username: data.username });
     if (existingAdmin) {
-      throw new Error('Admin user already exists');
+      throw new Error("Admin user already exists");
     }
 
     // Hash the password
@@ -70,7 +70,7 @@ export class AdminModel {
    */
   static async findById(id: string | ObjectId): Promise<Admin | null> {
     const collection = await this.getCollection();
-    const objectId = typeof id === 'string' ? new ObjectId(id) : id;
+    const objectId = typeof id === "string" ? new ObjectId(id) : id;
     return await collection.findOne({ _id: objectId, isActive: true });
   }
 
@@ -96,12 +96,9 @@ export class AdminModel {
    */
   static async updateLastLogin(adminId: string | ObjectId): Promise<void> {
     const collection = await this.getCollection();
-    const objectId = typeof adminId === 'string' ? new ObjectId(adminId) : adminId;
-    
-    await collection.updateOne(
-      { _id: objectId },
-      { $set: { lastLogin: new Date() } }
-    );
+    const objectId = typeof adminId === "string" ? new ObjectId(adminId) : adminId;
+
+    await collection.updateOne({ _id: objectId }, { $set: { lastLogin: new Date() } });
   }
 
   /**
@@ -109,15 +106,12 @@ export class AdminModel {
    */
   static async changePassword(adminId: string | ObjectId, newPassword: string): Promise<void> {
     const collection = await this.getCollection();
-    const objectId = typeof adminId === 'string' ? new ObjectId(adminId) : adminId;
-    
+    const objectId = typeof adminId === "string" ? new ObjectId(adminId) : adminId;
+
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-    
-    await collection.updateOne(
-      { _id: objectId },
-      { $set: { password: hashedPassword } }
-    );
+
+    await collection.updateOne({ _id: objectId }, { $set: { password: hashedPassword } });
   }
 
   /**
@@ -125,12 +119,9 @@ export class AdminModel {
    */
   static async deactivate(adminId: string | ObjectId): Promise<void> {
     const collection = await this.getCollection();
-    const objectId = typeof adminId === 'string' ? new ObjectId(adminId) : adminId;
-    
-    await collection.updateOne(
-      { _id: objectId },
-      { $set: { isActive: false } }
-    );
+    const objectId = typeof adminId === "string" ? new ObjectId(adminId) : adminId;
+
+    await collection.updateOne({ _id: objectId }, { $set: { isActive: false } });
   }
 
   /**
@@ -138,11 +129,8 @@ export class AdminModel {
    */
   static async getStats(): Promise<{ totalAdmins: number; activeAdmins: number }> {
     const collection = await this.getCollection();
-    
-    const [totalAdmins, activeAdmins] = await Promise.all([
-      collection.countDocuments(),
-      collection.countDocuments({ isActive: true })
-    ]);
+
+    const [totalAdmins, activeAdmins] = await Promise.all([collection.countDocuments(), collection.countDocuments({ isActive: true })]);
 
     return { totalAdmins, activeAdmins };
   }

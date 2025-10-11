@@ -1,49 +1,49 @@
-import { CreateCollectionOptions, IndexDescription } from 'mongodb';
+import { CreateCollectionOptions, IndexDescription } from "mongodb";
 
 export const repairServicesSchema: CreateCollectionOptions = {
   validator: {
     $jsonSchema: {
-      bsonType: 'object',
-      required: ['deviceModelId', 'repairTypeId', 'price', 'estimatedTimeMinutes', 'isActive', 'createdAt'],
+      bsonType: "object",
+      required: ["deviceModelId", "repairTypeId", "price", "estimatedTimeMinutes", "isActive", "createdAt"],
       properties: {
         deviceModelId: {
-          bsonType: 'objectId',
-          description: 'Device model ID is required and must be an ObjectId'
+          bsonType: "objectId",
+          description: "Device model ID is required and must be an ObjectId",
         },
         repairTypeId: {
-          bsonType: 'objectId',
-          description: 'Repair type ID is required and must be an ObjectId'
+          bsonType: "objectId",
+          description: "Repair type ID is required and must be an ObjectId",
         },
         description: {
-          bsonType: 'string',
-          description: 'Description is optional and must be a string'
+          bsonType: "string",
+          description: "Description is optional and must be a string",
         },
         price: {
-          bsonType: 'number',
+          bsonType: "number",
           minimum: 0,
-          description: 'Price is required and must be a positive number'
+          description: "Price is required and must be a positive number",
         },
         estimatedTimeMinutes: {
-          bsonType: 'int',
+          bsonType: "int",
           minimum: 1,
-          description: 'Estimated time is required and must be at least 1 minute'
+          description: "Estimated time is required and must be at least 1 minute",
         },
         isActive: {
-          bsonType: 'bool',
-          description: 'Is active is required and must be a boolean'
+          bsonType: "bool",
+          description: "Is active is required and must be a boolean",
         },
         createdAt: {
-          bsonType: 'date',
-          description: 'Created date is required and must be a date'
-        }
-      }
-    }
-  }
+          bsonType: "date",
+          description: "Created date is required and must be a date",
+        },
+      },
+    },
+  },
 };
 
 export const repairServicesIndexes: IndexDescription[] = [
-  { key: { deviceModelId: 1 }, name: 'repair_service_deviceModelIdx' },
-  { key: { repairTypeId: 1 }, name: 'repair_service_repair_type_idx' },
-  { key: { isActive: 1 }, name: 'repair_service_active_idx' },
-  { key: { price: 1 }, name: 'repair_service_price_idx' }
+  { key: { deviceModelId: 1 }, name: "repair_service_deviceModelIdx" },
+  { key: { repairTypeId: 1 }, name: "repair_service_repair_type_idx" },
+  { key: { isActive: 1 }, name: "repair_service_active_idx" },
+  { key: { price: 1 }, name: "repair_service_price_idx" },
 ];

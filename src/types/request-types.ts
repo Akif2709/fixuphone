@@ -42,4 +42,3 @@ export interface CreateRepairOrderRequest {
   orderDate: Date;
   estimatedCompletion: Date;
 }
-

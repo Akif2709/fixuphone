@@ -1,5 +1,5 @@
-import { ObjectId } from 'mongodb';
-import { BusinessHours } from './timeslot-types';
+import { ObjectId } from "mongodb";
+import { BusinessHours } from "./timeslot-types";
 
 // ==================== CONTACT INTERFACES ====================
 

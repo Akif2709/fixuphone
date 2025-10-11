@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LogOut, Settings, Package, Info, BarChart3 } from 'lucide-react';
-import { getAllRepairOrdersWithRelations } from '@/lib/database-actions';
-import { logoutAdmin } from '@/lib/database-actions/admin-actions';
-import { useRouter } from 'next/navigation';
-import type { RepairOrderStatus } from '@/types';
-import { RecentOrdersTab } from './tabs/recent-orders-tab';
-import { ContactInfoTab } from './tabs/contact-info-tab';
-import { StatsTab } from './tabs/stats-tab';
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LogOut, Settings, Package, Info, BarChart3 } from "lucide-react";
+import { getAllRepairOrdersWithRelations } from "@/lib/database-actions";
+import { logoutAdmin } from "@/lib/database-actions/admin-actions";
+import { useRouter } from "next/navigation";
+import type { RepairOrderStatus } from "@/types";
+import { RecentOrdersTab } from "./tabs/recent-orders-tab";
+import { ContactInfoTab } from "./tabs/contact-info-tab";
+import { StatsTab } from "./tabs/stats-tab";
 
 interface RepairOrder {
   _id?: string;
@@ -48,7 +48,7 @@ export function AdminDashboardContent() {
         const result = await getAllRepairOrdersWithRelations();
         if (result.success) {
           // Serialize the data to convert ObjectId to string
-          const serializedOrders = (result.data || []).map(order => ({
+          const serializedOrders = (result.data || []).map((order) => ({
             ...order,
             _id: order._id?.toString(),
           }));

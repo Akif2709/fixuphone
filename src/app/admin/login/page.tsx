@@ -25,14 +25,14 @@ export default function AdminLoginPage() {
 
     try {
       const result = await loginAdmin(formData);
-      
+
       if (result.success) {
         router.push("/admin");
         router.refresh();
       } else {
         setError(result.error || "Login failed");
       }
-    } catch (error) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);
@@ -41,9 +41,9 @@ export default function AdminLoginPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -55,9 +55,7 @@ export default function AdminLoginPage() {
             <Lock className="h-6 w-6 text-blue-600" />
           </div>
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access the admin panel
-          </CardDescription>
+          <CardDescription>Enter your credentials to access the admin panel</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,7 +76,7 @@ export default function AdminLoginPage() {
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -97,17 +95,9 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            {error && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
-                {error}
-              </div>
-            )}
+            {error && <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">{error}</div>}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>

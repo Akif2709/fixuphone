@@ -23,6 +23,7 @@ JWT_SECRET=your_secure_jwt_secret_here
 ### 🔒 **Security Best Practices**
 
 #### ✅ **DO:**
+
 - Store MongoDB URI in environment variables
 - Use `.env.local` for local development
 - Set environment variables in Plesk for production
@@ -30,6 +31,7 @@ JWT_SECRET=your_secure_jwt_secret_here
 - Use strong, unique database passwords
 
 #### ❌ **DON'T:**
+
 - Hardcode MongoDB credentials in source code
 - Commit `.env` files to version control
 - Share database credentials in plain text
@@ -40,16 +42,17 @@ JWT_SECRET=your_secure_jwt_secret_here
 ### MongoDB Atlas Setup
 
 Configure your MongoDB Atlas connection with:
+
 - **Database Name**: fixuphone
 - **Connection String**: Use your own MongoDB Atlas connection string
 
 ### Environment Variables for MongoDB
 
-| Variable Name | Value | Description |
-|---------------|-------|-------------|
-| `MONGODB_URI` | `your_mongodb_connection_string_here` | MongoDB Atlas connection string |
-| `MONGODB_DB_NAME` | `fixuphone` | Database name for the application |
-| `JWT_SECRET` | `your_secure_jwt_secret_here` | Secret key for JWT authentication |
+| Variable Name     | Value                                 | Description                       |
+| ----------------- | ------------------------------------- | --------------------------------- |
+| `MONGODB_URI`     | `your_mongodb_connection_string_here` | MongoDB Atlas connection string   |
+| `MONGODB_DB_NAME` | `fixuphone`                           | Database name for the application |
+| `JWT_SECRET`      | `your_secure_jwt_secret_here`         | Secret key for JWT authentication |
 
 ### Testing MongoDB Connection
 

@@ -1,17 +1,17 @@
-'use server';
+"use server";
 
-import { getContactInfo } from './contact-migration';
-import { 
-  getAllTimeSlots, 
-  getTimeSlotsForDay, 
+import { getContactInfo } from "./db-migrations/contact-migration";
+import {
+  getAllTimeSlots,
+  getTimeSlotsForDay,
   getAvailableTimeSlotsForDay,
   isTimeSlotAvailable,
   getBusinessHoursForDay,
   isBusinessOpenOnDay,
   getOpenDays,
-  getNextBusinessDay
-} from './utils/timeslot-utils';
-import { BusinessHours } from '../types';
+  getNextBusinessDay,
+} from "./utils/timeslot-utils";
+import { BusinessHours } from "../types";
 
 /**
  * Get contact information with integrated timeslot functionality
@@ -20,7 +20,7 @@ import { BusinessHours } from '../types';
 export async function getContactInfoWithTimeslots() {
   try {
     const contactInfo = await getContactInfo();
-    
+
     // Create timeslot utilities that use the contact info's business hours
     const timeslotUtils = {
       getAllTimeSlots: () => getAllTimeSlots(contactInfo.businessHours),
@@ -30,15 +30,15 @@ export async function getContactInfoWithTimeslots() {
       getBusinessHoursForDay: (dayId: string) => getBusinessHoursForDay(dayId, contactInfo.businessHours),
       isBusinessOpenOnDay: (dayId: string) => isBusinessOpenOnDay(dayId, contactInfo.businessHours),
       getOpenDays: () => getOpenDays(contactInfo.businessHours),
-      getNextBusinessDay: () => getNextBusinessDay(contactInfo.businessHours)
+      getNextBusinessDay: () => getNextBusinessDay(contactInfo.businessHours),
     };
-    
+
     return {
       ...contactInfo,
-      timeslotUtils
+      timeslotUtils,
     };
   } catch (error) {
-    console.error('❌ Error getting contact info with timeslots:', error);
+    console.error("❌ Error getting contact info with timeslots:", error);
     throw error;
   }
 }
@@ -51,7 +51,7 @@ export async function getBusinessHoursFromContact(): Promise<BusinessHours[]> {
     const contactInfo = await getContactInfo();
     return contactInfo.businessHours;
   } catch (error) {
-    console.error('❌ Error getting business hours from contact:', error);
+    console.error("❌ Error getting business hours from contact:", error);
     throw error;
   }
 }

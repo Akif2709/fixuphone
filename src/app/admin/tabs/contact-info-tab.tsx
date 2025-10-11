@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { getContactInfo, updateContactInfo } from '@/lib/database-actions';
-import { Save, Loader2 } from 'lucide-react';
-import type { BusinessHours } from '@/types';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { getContactInfo, updateContactInfo } from "@/lib/database-actions";
+import { Save, Loader2 } from "lucide-react";
+import type { BusinessHours } from "@/types";
 
 interface ContactInfoFormData {
   businessName: string;
@@ -25,21 +25,21 @@ interface ContactInfoFormData {
 
 export function ContactInfoTab() {
   const [formData, setFormData] = useState<ContactInfoFormData>({
-    businessName: '',
-    street: '',
-    postalCode: '',
-    city: '',
-    country: '',
-    phone: '',
-    whatsapp: '',
-    email: '',
-    mapEmbedSrc: '',
-    mapEmbedTitle: '',
+    businessName: "",
+    street: "",
+    postalCode: "",
+    city: "",
+    country: "",
+    phone: "",
+    whatsapp: "",
+    email: "",
+    mapEmbedSrc: "",
+    mapEmbedTitle: "",
     businessHours: [],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -61,8 +61,8 @@ export function ContactInfoTab() {
           });
         }
       } catch (error) {
-        console.error('Error fetching contact info:', error);
-        setMessage({ type: 'error', text: 'Failed to load contact information' });
+        console.error("Error fetching contact info:", error);
+        setMessage({ type: "error", text: "Failed to load contact information" });
       } finally {
         setLoading(false);
       }
@@ -73,13 +73,13 @@ export function ContactInfoTab() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleBusinessHourChange = (index: number, field: 'openTime' | 'closeTime', value: string) => {
+  const handleBusinessHourChange = (index: number, field: "openTime" | "closeTime", value: string) => {
     const updatedHours = [...formData.businessHours];
     updatedHours[index] = { ...updatedHours[index], [field]: value };
-    setFormData(prev => ({ ...prev, businessHours: updatedHours }));
+    setFormData((prev) => ({ ...prev, businessHours: updatedHours }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,13 +108,13 @@ export function ContactInfoTab() {
       });
 
       if (result.success) {
-        setMessage({ type: 'success', text: 'Contact information updated successfully!' });
+        setMessage({ type: "success", text: "Contact information updated successfully!" });
         setTimeout(() => setMessage(null), 5000);
       } else {
-        setMessage({ type: 'error', text: result.error || 'Failed to update contact information' });
+        setMessage({ type: "error", text: result.error || "Failed to update contact information" });
       }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'An unexpected error occurred' });
+    } catch {
+      setMessage({ type: "error", text: "An unexpected error occurred" });
     } finally {
       setSaving(false);
     }
@@ -136,22 +136,14 @@ export function ContactInfoTab() {
     <Card>
       <CardHeader>
         <CardTitle>Contact Information</CardTitle>
-        <CardDescription>
-          Update your business contact details and opening hours
-        </CardDescription>
+        <CardDescription>Update your business contact details and opening hours</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Business Name */}
           <div className="space-y-2">
             <Label htmlFor="businessName">Business Name</Label>
-            <Input
-              id="businessName"
-              name="businessName"
-              value={formData.businessName}
-              onChange={handleInputChange}
-              required
-            />
+            <Input id="businessName" name="businessName" value={formData.businessName} onChange={handleInputChange} required />
           </div>
 
           {/* Address Section */}
@@ -160,43 +152,19 @@ export function ContactInfoTab() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="street">Street Address</Label>
-                <Input
-                  id="street"
-                  name="street"
-                  value={formData.street}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="street" name="street" value={formData.street} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="postalCode">Postal Code</Label>
-                <Input
-                  id="postalCode"
-                  name="postalCode"
-                  value={formData.postalCode}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="city" name="city" value={formData.city} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="country">Country</Label>
-                <Input
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="country" name="country" value={formData.country} onChange={handleInputChange} required />
               </div>
             </div>
           </div>
@@ -207,36 +175,15 @@ export function ContactInfoTab() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="whatsapp">WhatsApp Number</Label>
-                <Input
-                  id="whatsapp"
-                  name="whatsapp"
-                  type="tel"
-                  value={formData.whatsapp}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="whatsapp" name="whatsapp" type="tel" value={formData.whatsapp} onChange={handleInputChange} required />
               </div>
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                />
+                <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
               </div>
             </div>
           </div>
@@ -255,14 +202,14 @@ export function ContactInfoTab() {
                       <Input
                         type="time"
                         value={hours.openTime}
-                        onChange={(e) => handleBusinessHourChange(index, 'openTime', e.target.value)}
+                        onChange={(e) => handleBusinessHourChange(index, "openTime", e.target.value)}
                         className="w-32"
                       />
                       <span>-</span>
                       <Input
                         type="time"
                         value={hours.closeTime}
-                        onChange={(e) => handleBusinessHourChange(index, 'closeTime', e.target.value)}
+                        onChange={(e) => handleBusinessHourChange(index, "closeTime", e.target.value)}
                         className="w-32"
                       />
                     </div>
@@ -303,9 +250,7 @@ export function ContactInfoTab() {
 
           {/* Message */}
           {message && (
-            <div className={`p-4 rounded-lg ${
-              message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-            }`}>
+            <div className={`p-4 rounded-lg ${message.type === "success" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}>
               {message.text}
             </div>
           )}

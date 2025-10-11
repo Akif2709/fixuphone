@@ -1,4 +1,4 @@
-import { ContactInfoModel } from '../db/models/ContactInfo';
+import { ContactInfoModel } from "../../db/models/ContactInfo";
 
 /**
  * Initial contact data for FixUphone
@@ -78,23 +78,23 @@ export const initialContactData = {
  */
 export async function migrateContactDataToDatabase(): Promise<void> {
   try {
-    console.log('🔄 Starting contact data migration...');
-    
+    console.log("🔄 Starting contact data migration...");
+
     // Check if contact info already exists
     const existingContactInfo = await ContactInfoModel.get();
-    
+
     if (existingContactInfo) {
-      console.log('✅ Contact info already exists, skipping migration');
+      console.log("✅ Contact info already exists, skipping migration");
       return;
     }
-    
+
     // Initialize contact info with default data
     const contactInfo = await ContactInfoModel.initialize(initialContactData);
-    
-    console.log('✅ Contact data migrated successfully:', contactInfo._id);
+
+    console.log("✅ Contact data migrated successfully:", contactInfo._id);
   } catch (error) {
-    console.error('❌ Error migrating contact data:', error);
-    throw new Error(`Failed to migrate contact data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("❌ Error migrating contact data:", error);
+    throw new Error(`Failed to migrate contact data: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }
 
@@ -116,12 +116,12 @@ export async function getContactInfo(): Promise<typeof initialContactData> {
         mapEmbed: contactInfo.mapEmbed,
       };
     }
-    
+
     // Fallback to static data if no database record exists
-    console.warn('⚠️ No contact info found in database, using static fallback');
+    console.warn("⚠️ No contact info found in database, using static fallback");
     return initialContactData;
   } catch (error) {
-    console.error('❌ Error fetching contact info from database, using static fallback:', error);
+    console.error("❌ Error fetching contact info from database, using static fallback:", error);
     return initialContactData;
   }
 }
@@ -133,11 +133,11 @@ export async function updateContactInfo(updateData: Partial<typeof initialContac
   try {
     const result = await ContactInfoModel.update(updateData);
     if (!result) {
-      throw new Error('Contact info not found in database');
+      throw new Error("Contact info not found in database");
     }
-    console.log('✅ Contact info updated successfully');
+    console.log("✅ Contact info updated successfully");
   } catch (error) {
-    console.error('❌ Error updating contact info:', error);
-    throw new Error(`Failed to update contact info: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("❌ Error updating contact info:", error);
+    throw new Error(`Failed to update contact info: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }

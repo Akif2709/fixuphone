@@ -7,13 +7,15 @@ FixUPhone is a Next.js application for managing device repair services with a co
 ## 🗄️ **Database Schema (ERD)**
 
 ### **Collections & Relationships:**
+
 ```
 BRAND ||--o{ DEVICE_MODEL : "has"
-DEVICE_MODEL ||--o{ REPAIR_SERVICE : "has"  
+DEVICE_MODEL ||--o{ REPAIR_SERVICE : "has"
 DEVICE_MODEL ||--o{ REPAIR_ORDER : "for"
 ```
 
 ### **Collections:**
+
 1. **`brands`** - Brand information (Apple, Samsung, etc.)
 2. **`device_models`** - Device models with brand relationships
 3. **`repair_services`** - Repair services linked to device models
@@ -22,7 +24,9 @@ DEVICE_MODEL ||--o{ REPAIR_ORDER : "for"
 ## 🚀 **Quick Start**
 
 ### **1. Environment Setup**
+
 Create `.env.local` file:
+
 ```bash
 # MongoDB Configuration
 MONGODB_URI=your_mongodb_connection_string_here
@@ -38,16 +42,19 @@ NODE_ENV=development
 ```
 
 ### **2. Install Dependencies**
+
 ```bash
 npm install
 ```
 
 ### **3. Setup Database**
+
 ```bash
 npm run db:setup
 ```
 
 ### **4. Run Development Server**
+
 ```bash
 npm run dev
 ```
@@ -55,6 +62,7 @@ npm run dev
 ## 🗄️ **Database Setup**
 
 ### **Setup Database Schema:**
+
 ```bash
 # Run database setup (creates collections, indexes, sample data)
 npm run db:setup
@@ -64,12 +72,14 @@ npm run db:reset
 ```
 
 ### **What the Setup Does:**
+
 - ✅ Creates 4 collections with validation rules
 - ✅ Creates 15+ indexes for optimal performance
 - ✅ Inserts sample data (Apple, Samsung, iPhone 14 Pro, Galaxy S23, repair services, sample order)
 - ✅ Sets up proper relationships between collections
 
 ### **Sample Data Created:**
+
 - **Brands**: Apple, Samsung
 - **Device Models**: iPhone 14 Pro, Galaxy S23
 - **Repair Services**: Screen Repair, Battery Replacement
@@ -120,32 +130,34 @@ src/
 ## 🔧 **Database Operations**
 
 ### **Server Actions Available:**
+
 ```typescript
 // Brand operations
-createBrand(data)
-getAllBrands()
-getBrandById(id)
+createBrand(data);
+getAllBrands();
+getBrandById(id);
 
 // Device model operations
-createDeviceModel(data)
-getAllDeviceModels()
-getDeviceModelsByBrand(brandId)
-getDeviceModelsWithBrands()
+createDeviceModel(data);
+getAllDeviceModels();
+getDeviceModelsByBrand(brandId);
+getDeviceModelsWithBrands();
 
 // Repair service operations
-createRepairService(data)
-getAllRepairServices()
-getRepairServicesByDeviceModel(deviceModelId)
-getRepairServicesWithDeviceModels()
+createRepairService(data);
+getAllRepairServices();
+getRepairServicesByDeviceModel(deviceModelId);
+getRepairServicesWithDeviceModels();
 
 // Repair order operations
-createRepairOrder(data)
-getAllRepairOrdersWithRelations()
-getRepairOrdersByStatus(status)
-updateRepairOrderStatus(id, status)
+createRepairOrder(data);
+getAllRepairOrdersWithRelations();
+getRepairOrdersByStatus(status);
+updateRepairOrderStatus(id, status);
 ```
 
 ### **Usage Examples:**
+
 ```typescript
 // Create a repair order
 const repairOrder = await createRepairOrder({
@@ -159,7 +171,7 @@ const repairOrder = await createRepairOrder({
   problem_description: "Screen is cracked",
   order_date: new Date(),
   estimated_completion: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  repair_cost: 150
+  repair_cost: 150,
 });
 
 // Get all repair orders with relations
@@ -170,6 +182,7 @@ const orders = await getAllRepairOrdersWithRelations();
 ## 🎯 **Key Features**
 
 ### **Database Features:**
+
 - ✅ **ERD-based Schema** - Proper relationships between collections
 - ✅ **Type Safety** - Full TypeScript support
 - ✅ **Validation** - MongoDB schema validation
@@ -178,6 +191,7 @@ const orders = await getAllRepairOrdersWithRelations();
 - ✅ **Server Actions** - Direct database access from UI
 
 ### **Application Features:**
+
 - ✅ **Admin Dashboard** - Manage repair orders
 - ✅ **Booking System** - Customer booking interface
 - ✅ **Email Integration** - EmailJS for notifications
@@ -187,12 +201,14 @@ const orders = await getAllRepairOrdersWithRelations();
 ## 🔒 **Security**
 
 ### **Environment Variables:**
+
 - ✅ MongoDB credentials stored in environment variables
 - ✅ Never commit `.env` files to version control
 - ✅ Use `.env.local` for local development
 - ✅ Set environment variables in production
 
 ### **Database Security:**
+
 - ✅ Schema validation prevents invalid data
 - ✅ Indexes optimize query performance
 - ✅ Proper error handling and logging
@@ -200,6 +216,7 @@ const orders = await getAllRepairOrdersWithRelations();
 ## 🚀 **Deployment**
 
 ### **Environment Variables for Production:**
+
 ```bash
 NODE_ENV=production
 MONGODB_URI=your_production_mongodb_uri
@@ -210,6 +227,7 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
 ```
 
 ### **Build and Deploy:**
+
 ```bash
 npm run build
 npm start
@@ -231,6 +249,7 @@ npm run format       # Format code with Prettier
 ## 🎉 **Success!**
 
 Your FixUPhone application is now ready with:
+
 - ✅ **Complete ERD Database Schema**
 - ✅ **Type-Safe MongoDB Operations**
 - ✅ **Admin Dashboard**
@@ -239,5 +258,3 @@ Your FixUPhone application is now ready with:
 - ✅ **Production Ready**
 
 The database is fully configured and ready for use! 🚀
-
-

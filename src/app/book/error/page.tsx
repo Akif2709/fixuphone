@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Calendar, Phone, Mail, ArrowLeft, Home, RefreshCw } from "lucide-react";
+import { AlertTriangle, Calendar, Phone, Mail, Home, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 interface BookingData {

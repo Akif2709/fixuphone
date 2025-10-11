@@ -28,4 +28,3 @@ export interface RepairOrderQuery {
   deviceModelId?: string;
   repairServiceId?: string;
 }
-

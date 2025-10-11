@@ -1,8 +1,8 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 // ==================== CORE TYPES ====================
 
-export type RepairOrderStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+export type RepairOrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
 
 // ==================== CORE INTERFACES ====================
 
@@ -53,12 +53,12 @@ export interface RepairOrder {
   orderNumber: string;
   deviceModelId: ObjectId;
   repairServiceId: ObjectId;
-  
+
   // Customer info
   customerName: string;
   customerPhone: string;
   customerEmail?: string; // optional
-  
+
   // Device info
   imeiOrSerial: string; // combined field name
   problemDescription: string;
@@ -69,7 +69,7 @@ export interface RepairOrder {
   estimatedCompletion: Date;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Populated
   deviceModel?: DeviceModel;
   repairService?: RepairService;

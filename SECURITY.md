@@ -9,6 +9,7 @@ This document outlines security best practices for the FixUphone application.
 ### Setup
 
 1. **Copy the example file:**
+
    ```bash
    cp .env.example .env.local
    ```
@@ -19,21 +20,21 @@ This document outlines security best practices for the FixUphone application.
 
 ### Required Variables
 
-| Variable | Description | How to Get |
-|----------|-------------|------------|
-| `MONGODB_URI` | MongoDB connection string | [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) |
-| `JWT_SECRET` | Secret for JWT tokens | Generate: `openssl rand -base64 32` |
-| `NEXT_PUBLIC_EMAILJS_SERVICE_ID` | EmailJS service ID | [EmailJS Dashboard](https://www.emailjs.com/) |
-| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | EmailJS template ID | [EmailJS Dashboard](https://www.emailjs.com/) |
-| `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` | EmailJS public key | [EmailJS Dashboard](https://www.emailjs.com/) |
+| Variable                          | Description               | How to Get                                           |
+| --------------------------------- | ------------------------- | ---------------------------------------------------- |
+| `MONGODB_URI`                     | MongoDB connection string | [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) |
+| `JWT_SECRET`                      | Secret for JWT tokens     | Generate: `openssl rand -base64 32`                  |
+| `NEXT_PUBLIC_EMAILJS_SERVICE_ID`  | EmailJS service ID        | [EmailJS Dashboard](https://www.emailjs.com/)        |
+| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | EmailJS template ID       | [EmailJS Dashboard](https://www.emailjs.com/)        |
+| `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`  | EmailJS public key        | [EmailJS Dashboard](https://www.emailjs.com/)        |
 
 ### Optional Variables (Admin Setup)
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `ADMIN_USERNAME` | Initial admin username | `admin` |
-| `ADMIN_INITIAL_PASSWORD` | Initial admin password | `ChangeMe123!` |
-| `ADMIN_EMAIL` | Admin email address | `admin@fixuphone.nl` |
+| Variable                 | Description            | Default              |
+| ------------------------ | ---------------------- | -------------------- |
+| `ADMIN_USERNAME`         | Initial admin username | `admin`              |
+| `ADMIN_INITIAL_PASSWORD` | Initial admin password | `ChangeMe123!`       |
+| `ADMIN_EMAIL`            | Admin email address    | `admin@fixuphone.nl` |
 
 ## Database Security
 
@@ -77,6 +78,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ### Initial Setup
 
 1. Run the admin creation script:
+
    ```bash
    node scripts/create-admin.js
    ```
@@ -152,10 +154,10 @@ grep -r "password.*:" . --include="*.ts" --include="*.js"
 ### Environment-Specific Secrets
 
 | Environment | Secret Strength | Rotation Frequency |
-|-------------|----------------|-------------------|
-| Development | Medium | Rarely |
-| Staging | High | Monthly |
-| Production | Maximum | Weekly/Monthly |
+| ----------- | --------------- | ------------------ |
+| Development | Medium          | Rarely             |
+| Staging     | High            | Monthly            |
+| Production  | Maximum         | Weekly/Monthly     |
 
 ## Incident Response
 
@@ -188,15 +190,18 @@ For security vulnerabilities or concerns:
 ## Regular Security Tasks
 
 ### Weekly
+
 - [ ] Review access logs
 - [ ] Check for suspicious activity
 
 ### Monthly
+
 - [ ] Update dependencies (`npm audit`)
 - [ ] Review security advisories
 - [ ] Test backup/recovery procedures
 
 ### Quarterly
+
 - [ ] Rotate JWT secrets
 - [ ] Rotate database credentials
 - [ ] Security audit
@@ -211,11 +216,10 @@ For security vulnerabilities or concerns:
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2024-10-11 | Initial security documentation |
+| Version | Date       | Changes                        |
+| ------- | ---------- | ------------------------------ |
+| 1.0.0   | 2024-10-11 | Initial security documentation |
 
 ---
 
 **Remember**: Security is an ongoing process, not a one-time setup. Stay vigilant! 🔒
-

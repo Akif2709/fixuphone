@@ -1,29 +1,30 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { getDeviceStats } from '@/lib/actions';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Wrench, Calendar, CheckCircle, Clock } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { getRepairOrderStats } from "@/lib/database-actions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Wrench, Calendar, CheckCircle, Clock } from "lucide-react";
 
-interface DeviceStats {
-  total: number;
-  byStatus: Record<string, number>;
-  byDeviceType: Record<string, number>;
+interface RepairOrderStats {
+  total_orders: number;
+  orders_by_status: Record<string, number>;
+  orders_by_brand: Record<string, number>;
+  total_revenue: number;
 }
 
 export default function DeviceStats() {
-  const [stats, setStats] = useState<DeviceStats | null>(null);
+  const [stats, setStats] = useState<RepairOrderStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const result = await getDeviceStats();
-        if (result.success) {
+        const result = await getRepairOrderStats();
+        if (result.success && result.data) {
           setStats(result.data);
         }
       } catch (error) {
-        console.error('Failed to fetch stats:', error);
+        console.error("Failed to fetch stats:", error);
       } finally {
         setLoading(false);
       }
@@ -48,7 +49,7 @@ export default function DeviceStats() {
           <Wrench className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.total}</div>
+          <div className="text-2xl font-bold">{stats.total_orders}</div>
         </CardContent>
       </Card>
 
@@ -58,9 +59,7 @@ export default function DeviceStats() {
           <Clock className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-yellow-600">
-            {stats.byStatus.pending || 0}
-          </div>
+          <div className="text-2xl font-bold text-yellow-600">{stats.orders_by_status.pending || 0}</div>
         </CardContent>
       </Card>
 
@@ -70,9 +69,7 @@ export default function DeviceStats() {
           <Calendar className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-blue-600">
-            {stats.byStatus.confirmed || 0}
-          </div>
+          <div className="text-2xl font-bold text-blue-600">{stats.orders_by_status.confirmed || 0}</div>
         </CardContent>
       </Card>
 
@@ -82,9 +79,7 @@ export default function DeviceStats() {
           <CheckCircle className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">
-            {stats.byStatus.completed || 0}
-          </div>
+          <div className="text-2xl font-bold text-green-600">{stats.orders_by_status.completed || 0}</div>
         </CardContent>
       </Card>
     </div>

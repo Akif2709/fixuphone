@@ -48,18 +48,21 @@ npx tsx src/db/setup-schema.ts
 ## 📊 **What the Setup Script Does**
 
 ### **1. Creates Collections with Validation**
+
 - ✅ **brands** - Brand information with validation
 - ✅ **device_models** - Device models with brand relationships
 - ✅ **repair_services** - Repair services linked to device models
 - ✅ **repair_orders** - Repair orders with full customer information
 
 ### **2. Creates Performance Indexes**
+
 - ✅ **Unique indexes** for brand names, order numbers
 - ✅ **Performance indexes** for common queries
 - ✅ **Compound indexes** for complex queries
 - ✅ **Foreign key indexes** for relationships
 
 ### **3. Inserts Sample Data**
+
 - ✅ **Sample brands** (Apple, Samsung)
 - ✅ **Sample device models** (iPhone 14 Pro, Galaxy S23)
 - ✅ **Sample repair services** (Screen repair, Battery replacement)
@@ -106,15 +109,19 @@ When you run the setup, you should see:
 ### **Common Issues:**
 
 1. **Connection Error**:
+
    ```
    Error: Please add your MongoDB URI to .env.local
    ```
+
    **Solution**: Check your `.env.local` file has the correct `MONGODB_URI`
 
 2. **Permission Error**:
+
    ```
    Error: not authorized on fixuphone to execute command
    ```
+
    **Solution**: Check your MongoDB Atlas user has read/write permissions
 
 3. **Collection Already Exists**:
@@ -145,11 +152,9 @@ After running the setup, you can verify it worked by:
 Once the setup completes successfully, your database will have:
 
 - ✅ **4 Collections** with proper validation
-- ✅ **15+ Indexes** for optimal performance  
+- ✅ **15+ Indexes** for optimal performance
 - ✅ **Sample Data** for testing
 - ✅ **Proper Relationships** between collections
 - ✅ **Ready for Production** use
 
 Your MongoDB database is now fully configured and ready to use with your Next.js application! 🚀
-
-
