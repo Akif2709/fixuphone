@@ -13,7 +13,8 @@ export async function getContactInfo(): Promise<{ success: true; data: Serialize
   try {
     const contactInfo = await ContactInfoModel.get();
     if (!contactInfo) {
-      return { success: false, error: "Contact info not found" };
+      console.error("Contact info not found in database. Run: node scripts/init-contact-info.mjs");
+      return { success: false, error: "Contact info not found. Please initialize contact data." };
     }
 
     // Serialize the data to convert ObjectId to string
@@ -25,7 +26,8 @@ export async function getContactInfo(): Promise<{ success: true; data: Serialize
     return { success: true, data: serializedData };
   } catch (error) {
     console.error("Error fetching contact info:", error);
-    return { success: false, error: "Failed to fetch contact info" };
+    const errorMessage = error instanceof Error ? error.message : "Failed to fetch contact info";
+    return { success: false, error: `Database error: ${errorMessage}` };
   }
 }
 
