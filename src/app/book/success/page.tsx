@@ -11,10 +11,8 @@ interface BookingData {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  deviceType: string;
-  deviceBrand?: string;
-  deviceModel?: string;
-  deviceDescription?: string;
+  deviceBrand: string;
+  deviceModel: string;
   service: string;
   issue?: string;
   preferredDate: string;
@@ -32,25 +30,31 @@ function BookingSuccessContent() {
     const customerName = searchParams?.get("customerName");
     const customerEmail = searchParams?.get("customerEmail");
     const customerPhone = searchParams?.get("customerPhone");
-    const deviceType = searchParams?.get("deviceType");
     const deviceBrand = searchParams?.get("deviceBrand");
     const deviceModel = searchParams?.get("deviceModel");
-    const deviceDescription = searchParams?.get("deviceDescription");
     const service = searchParams?.get("service");
     const issue = searchParams?.get("issue");
     const preferredDate = searchParams?.get("preferredDate");
     const preferredTime = searchParams?.get("preferredTime");
 
-    if (bookingId && customerName && customerEmail && customerPhone && deviceType && service && preferredDate && preferredTime) {
+    if (
+      bookingId &&
+      customerName &&
+      customerEmail &&
+      customerPhone &&
+      deviceBrand &&
+      deviceModel &&
+      service &&
+      preferredDate &&
+      preferredTime
+    ) {
       setBookingData({
         bookingId,
         customerName,
         customerEmail,
         customerPhone,
-        deviceType,
-        deviceBrand: deviceBrand || undefined,
-        deviceModel: deviceModel || undefined,
-        deviceDescription: deviceDescription || undefined,
+        deviceBrand,
+        deviceModel,
         service,
         issue: issue || undefined,
         preferredDate,
@@ -65,13 +69,9 @@ function BookingSuccessContent() {
   const getDeviceDisplayName = () => {
     if (!bookingData) return "";
 
-    if (bookingData.deviceType === "other") {
-      return bookingData.deviceDescription || "Ander apparaat";
-    } else {
-      const brand = bookingData.deviceBrand || "";
-      const model = bookingData.deviceModel || "";
-      return `${brand} ${model}`.trim();
-    }
+    const brand = bookingData.deviceBrand || "";
+    const model = bookingData.deviceModel || "";
+    return `${brand} ${model}`.trim();
   };
 
   const getServiceDisplayName = (serviceId: string) => {
@@ -154,10 +154,6 @@ function BookingSuccessContent() {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-3">Apparaat Informatie</h3>
                   <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Type:</span>
-                      <span className="font-medium text-gray-900 capitalize">{bookingData.deviceType}</span>
-                    </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Apparaat:</span>
                       <span className="font-medium text-gray-900">{getDeviceDisplayName()}</span>

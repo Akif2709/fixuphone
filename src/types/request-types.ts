@@ -1,3 +1,5 @@
+import { DeviceType } from "./core-types";
+
 // ==================== REQUEST INTERFACES ====================
 
 export interface CreateBrandRequest {
@@ -8,7 +10,7 @@ export interface CreateBrandRequest {
 export interface CreateDeviceModelRequest {
   brandId: string;
   name: string;
-  type: string;
+  type: DeviceType;
   specifications?: string;
   releaseYear: number;
 }

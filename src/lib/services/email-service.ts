@@ -10,10 +10,8 @@ export interface BookingEmailData {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  deviceType: string;
-  deviceBrand?: string;
-  deviceModel?: string;
-  deviceDescription?: string;
+  deviceBrand: string;
+  deviceModel: string;
   service: string;
   issue?: string;
   preferredDate: string;
@@ -40,12 +38,10 @@ export const sendBookingConfirmationEmail = async (bookingData: BookingEmailData
       to_email: bookingData.customerEmail,
       customer_name: bookingData.customerName,
       customer_phone: bookingData.customerPhone,
-      device_type: bookingData.deviceType,
-      device_brand: bookingData.deviceBrand || "N/A",
-      device_model: bookingData.deviceModel || "N/A",
-      device_description: bookingData.deviceDescription || "N/A",
+      device_brand: bookingData.deviceBrand,
+      device_model: bookingData.deviceModel,
       service: bookingData.service,
-      issue: bookingData.issue || "",
+      issue: bookingData.issue || "Geen aanvullende informatie",
       preferred_date: bookingData.preferredDate,
       preferred_time: bookingData.preferredTime,
       booking_id: bookingData.bookingId,

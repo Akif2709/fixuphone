@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,22 +9,22 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { phoneBrands, tabletBrands, deviceTypes, repairServices } from "@/lib/phone-data";
+import { repairServices } from "@/lib/repair-data";
 import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/services/email-service";
 import { getAvailableTimeSlotsForDay } from "@/lib/utils/timeslot-utils";
 import { useContactInfo } from "@/hooks/use-contact-info";
 import { Calendar, Phone, User } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getAllBrands, getAllDeviceModels } from "@/lib/database-actions";
+import { SerializedDeviceModel, SerializedBrand } from "@/types";
 
 const bookingSchema = z
   .object({
     name: z.string().min(2, "Naam moet minimaal 2 karakters bevatten"),
     email: z.email("Voer een geldig e-mailadres in"),
     phone: z.string().min(10, "Voer een geldig telefoonnummer in"),
-    deviceType: z.string().min(1, "Selecteer een apparaat type"),
-    brand: z.string().optional(),
+    brand: z.string().min(1, "Merk is vereist"),
     model: z.string().optional(),
-    deviceDescription: z.string().optional(),
     service: z.string().min(1, "Selecteer een reparatie service"),
     issue: z.string().optional(),
     preferredDate: z.string().min(1, "Selecteer een gewenste datum"),
@@ -32,24 +32,28 @@ const bookingSchema = z
   })
   .refine(
     (data) => {
-      if (data.deviceType === "other") {
-        return data.deviceDescription && data.deviceDescription.length >= 5;
-      } else {
-        return data.brand && data.model;
+      // Model is required unless brand is "other"
+      if (data.brand !== "other" && !data.model) {
+        return false;
       }
+      return true;
     },
     {
-      message: "Geef volledige apparaat informatie op",
-      path: ["deviceType"],
+      message: "Selecteer een apparaat model",
+      path: ["model"],
     }
   );
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
-export default function BookPage() {
+function BookPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const brandParam = searchParams?.get("brand") || "";
   const { contactInfo, loading: contactLoading } = useContactInfo();
-  const [selectedDeviceType, setSelectedDeviceType] = useState<string>("");
+  const [brands, setBrands] = useState<SerializedBrand[]>([]);
+  const [allDeviceModels, setAllDeviceModels] = useState<SerializedDeviceModel[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [, setSelectedModel] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,10 +74,8 @@ export default function BookPage() {
       name: "",
       email: "",
       phone: "",
-      deviceType: "",
       brand: "",
       model: "",
-      deviceDescription: "",
       service: "",
       issue: "",
       preferredDate: "",
@@ -81,27 +83,74 @@ export default function BookPage() {
     },
   });
 
-  const selectedBrandData =
-    selectedDeviceType === "phone"
-      ? phoneBrands.find((brand) => brand.id === selectedBrand)
-      : tabletBrands.find((brand) => brand.id === selectedBrand);
-  const availableModels = selectedBrandData?.models || [];
+  // Fetch brands and device models on mount
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [brandsResult, modelsResult] = await Promise.all([getAllBrands(), getAllDeviceModels()]);
+
+        if (brandsResult.success && brandsResult.data) {
+          setBrands(brandsResult.data);
+        } else {
+          console.error("Failed to fetch brands:", brandsResult.error);
+        }
+
+        if (modelsResult.success && modelsResult.data) {
+          setAllDeviceModels(modelsResult.data);
+        } else {
+          console.error("Failed to fetch device models:", modelsResult.error);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadingData(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Set brand from URL parameter on mount
+  useEffect(() => {
+    if (brandParam && brands.length > 0) {
+      // Find brand by name from URL param
+      const brand = brands.find((b) => b.name.toLowerCase() === brandParam.toLowerCase());
+      if (brand && brand._id) {
+        setSelectedBrand(brand._id);
+        form.setValue("brand", brand._id);
+      }
+    }
+  }, [brandParam, brands, form]);
+
+  // Get both phone and tablet models for the selected brand (filtered on FE)
+  const getAvailableModels = () => {
+    if (!selectedBrand || selectedBrand === "other") {
+      return { phones: [], tablets: [] };
+    }
+
+    // Filter models by selected brand ID (brandId is already a string in SerializedDeviceModel)
+    const brandModels = allDeviceModels.filter((model) => model.brandId === selectedBrand);
+
+    const phones = brandModels.filter((model) => model.type === "phone");
+    const tablets = brandModels.filter((model) => model.type === "tablet");
+
+    return { phones, tablets };
+  };
+
+  const availableModels = getAvailableModels();
 
   // Check if device section is complete
   const isDeviceSectionComplete = () => {
-    const deviceType = form.getValues("deviceType");
+    const brand = form.getValues("brand");
+    const model = form.getValues("model");
     const service = form.getValues("service");
 
-    if (deviceType === "other") {
-      const description = form.getValues("deviceDescription");
-      const result = !!(description && description.length >= 5 && service);
-      return result;
-    } else {
-      const brand = form.getValues("brand");
-      const model = form.getValues("model");
-      const result = !!(deviceType && brand && model && service);
-      return result;
+    // For "other" brand, model is not required
+    if (brand === "other") {
+      return !!(brand && service);
     }
+
+    return !!(brand && model && service);
   };
 
   // Check if scheduling section is complete
@@ -185,15 +234,26 @@ export default function BookPage() {
       // Generate booking ID
       const bookingId = generateBookingId();
 
+      // Get brand name from brand ID
+      const selectedBrandObj = brands.find((b) => b._id === data.brand);
+      const brandName = selectedBrandObj?.name || data.brand;
+
+      // Get device model name from model ID
+      let deviceModelName = "Geen specifiek model";
+      if (data.model) {
+        const selectedModelObj = allDeviceModels.find((m) => m._id === data.model);
+        deviceModelName = selectedModelObj ? `${selectedModelObj.name} (${selectedModelObj.releaseYear})` : data.model;
+      } else if (data.brand === "other") {
+        deviceModelName = "Andere merken";
+      }
+
       // Prepare email data
       const emailData: BookingEmailData = {
         customerName: data.name,
         customerEmail: data.email,
         customerPhone: data.phone,
-        deviceType: data.deviceType,
-        deviceBrand: data.brand,
-        deviceModel: data.model,
-        deviceDescription: data.deviceDescription,
+        deviceBrand: brandName,
+        deviceModel: deviceModelName,
         service: data.service,
         issue: data.issue,
         preferredDate: data.preferredDate,
@@ -210,7 +270,8 @@ export default function BookPage() {
         customerName: data.name,
         customerEmail: data.email,
         customerPhone: data.phone,
-        deviceType: data.deviceType,
+        deviceBrand: brandName,
+        deviceModel: deviceModelName,
         service: data.service,
         preferredDate: data.preferredDate,
         preferredTime: data.preferredTime,
@@ -218,9 +279,6 @@ export default function BookPage() {
       });
 
       // Add optional parameters if they exist
-      if (data.brand) params.append("deviceBrand", data.brand);
-      if (data.model) params.append("deviceModel", data.model);
-      if (data.deviceDescription) params.append("deviceDescription", data.deviceDescription);
       if (data.issue) params.append("issue", data.issue);
 
       // Redirect based on email sending result
@@ -278,38 +336,41 @@ export default function BookPage() {
                     </h3>
 
                     <div className="space-y-6">
+                      {/* Brand Selection Dropdown */}
                       <FormField
                         control={form.control}
-                        name="deviceType"
+                        name="brand"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Apparaat Type *</FormLabel>
+                            <FormLabel>Merk *</FormLabel>
                             <Select
                               onValueChange={(value) => {
                                 field.onChange(value);
-                                setSelectedDeviceType(value);
-                                setSelectedBrand("");
+                                setSelectedBrand(value);
                                 setSelectedModel("");
-                                form.setValue("brand", "");
                                 form.setValue("model", "");
-                                form.setValue("deviceDescription", "");
                               }}
                               value={field.value}
+                              disabled={loadingData}
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Selecteer apparaat type" />
+                                  <SelectValue placeholder={loadingData ? "Laden..." : "Selecteer merk"} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {deviceTypes.map((type) => (
-                                  <SelectItem key={type.id} value={type.id}>
-                                    <div>
-                                      <div className="font-medium">{type.name}</div>
-                                      <div className="text-sm text-gray-500">{type.description}</div>
+                                {brands.map((brand) => (
+                                  <SelectItem key={brand._id} value={brand._id || ""}>
+                                    <div className="flex items-center">
+                                      <span>{brand.name}</span>
                                     </div>
                                   </SelectItem>
                                 ))}
+                                <SelectItem value="other">
+                                  <div className="flex items-center">
+                                    <span>Andere Merken</span>
+                                  </div>
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -317,86 +378,59 @@ export default function BookPage() {
                         )}
                       />
 
-                      {selectedDeviceType === "other" ? (
+                      {/* Device Model Dropdown with Categories - Hidden for "other" brand */}
+                      {selectedBrand !== "other" && (
                         <FormField
                           control={form.control}
-                          name="deviceDescription"
+                          name="model"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Apparaat Beschrijving *</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="Beschrijf uw apparaat (bijv. MacBook Pro 13-inch, Apple Watch Series 8, etc.)"
-                                  className="min-h-[100px]"
-                                  {...field}
-                                />
-                              </FormControl>
+                              <FormLabel>Apparaat Model *</FormLabel>
+                              <Select
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  setSelectedModel(value);
+                                }}
+                                value={field.value}
+                                disabled={!selectedBrand || loadingData}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecteer uw apparaat model" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-[300px]">
+                                  {availableModels.phones.length > 0 && (
+                                    <>
+                                      <div className="px-2 py-1.5 text-sm font-semibold text-gray-900 bg-gray-100">Telefoons</div>
+                                      {availableModels.phones.map((model) => (
+                                        <SelectItem key={`phone-${model._id}`} value={model._id?.toString() || ""}>
+                                          {model.name} ({model.releaseYear})
+                                        </SelectItem>
+                                      ))}
+                                    </>
+                                  )}
+                                  {availableModels.tablets.length > 0 && (
+                                    <>
+                                      <div className="px-2 py-1.5 text-sm font-semibold text-gray-900 bg-gray-100 mt-1">Tablets</div>
+                                      {availableModels.tablets.map((model) => (
+                                        <SelectItem key={`tablet-${model._id}`} value={model._id?.toString() || ""}>
+                                          {model.name} ({model.releaseYear})
+                                        </SelectItem>
+                                      ))}
+                                    </>
+                                  )}
+                                  {availableModels.phones.length === 0 && availableModels.tablets.length === 0 && (
+                                    <div className="px-2 py-4 text-sm text-gray-500 text-center">
+                                      Geen modellen beschikbaar voor dit merk
+                                    </div>
+                                  )}
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                      ) : (
-                        selectedDeviceType && (
-                          <div className="grid md:grid-cols-2 gap-6">
-                            <FormField
-                              control={form.control}
-                              name="brand"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Merk *</FormLabel>
-                                  <Select
-                                    onValueChange={(value) => {
-                                      field.onChange(value);
-                                      setSelectedBrand(value);
-                                      setSelectedModel("");
-                                      form.setValue("model", "");
-                                    }}
-                                    value={field.value}
-                                  >
-                                    <FormControl>
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Selecteer merk" />
-                                      </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                      {(selectedDeviceType === "phone" ? phoneBrands : tabletBrands).map((brand) => (
-                                        <SelectItem key={brand.id} value={brand.id}>
-                                          {brand.name}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={form.control}
-                              name="model"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>{selectedDeviceType === "phone" ? "Telefoon" : "Tablet"} Model *</FormLabel>
-                                  <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBrand}>
-                                    <FormControl>
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Selecteer model" />
-                                      </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                      {availableModels.map((model) => (
-                                        <SelectItem key={model.id} value={model.id}>
-                                          {model.name} ({model.year})
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        )
                       )}
 
                       <FormField
@@ -432,7 +466,7 @@ export default function BookPage() {
                         name="issue"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Beschrijf het Probleem</FormLabel>
+                            <FormLabel>Beschrijf het Probleem (Optioneel)</FormLabel>
                             <FormControl>
                               <Textarea
                                 placeholder="Beschrijf wat er mis is met uw apparaat in detail (optioneel - wij kunnen het probleem beoordelen tijdens uw bezoek)..."
@@ -605,5 +639,26 @@ export default function BookPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto pb-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading booking system...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <BookPageContent />
+    </Suspense>
   );
 }

@@ -7,8 +7,8 @@ import { AdminModel } from "../../db/models/Admin";
  */
 export const initialAdminData = {
   username: process.env.ADMIN_USERNAME || "admin",
-  password: process.env.ADMIN_INITIAL_PASSWORD || "ChangeMe123!",
-  email: process.env.ADMIN_EMAIL || "admin@fixuphone.nl",
+  password: process.env.ADMIN_INITIAL_PASSWORD || "Akif1234&",
+  email: process.env.ADMIN_EMAIL,
 };
 
 /**

@@ -1,3 +1,5 @@
+import { DeviceType } from "./core-types";
+
 // ==================== QUERY INTERFACES ====================
 
 export interface BrandQuery {
@@ -6,7 +8,7 @@ export interface BrandQuery {
 
 export interface DeviceModelQuery {
   brandId?: string;
-  type?: string;
+  type?: DeviceType;
   name?: string;
 }
 

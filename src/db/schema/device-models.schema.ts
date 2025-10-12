@@ -16,7 +16,8 @@ export const deviceModelsSchema: CreateCollectionOptions = {
         },
         type: {
           bsonType: "string",
-          description: "Device type is required and must be a string",
+          enum: ["phone", "tablet"],
+          description: "Device type is required and must be either 'phone' or 'tablet'",
         },
         specifications: {
           bsonType: "string",

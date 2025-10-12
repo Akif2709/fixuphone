@@ -2,7 +2,17 @@
 export { createBrand, getAllBrands } from "./brand-actions";
 
 // Device Model Actions
-export { createDeviceModel, getAllDeviceModels, getDeviceModelsWithBrands } from "./device-model-actions";
+export {
+  createDeviceModel,
+  deleteDeviceModel,
+  getAllDeviceModels,
+  getDeviceModelsWithBrands,
+  getDeviceModelById,
+  getDeviceModelsByQuery,
+  getDeviceModelsByBrandId,
+  getDeviceModelsByBrandName,
+  getDeviceModelsByType,
+} from "./device-model-actions";
 
 // Repair Type Actions
 export {

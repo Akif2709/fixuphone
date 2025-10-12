@@ -4,6 +4,8 @@ import { ObjectId } from "mongodb";
 
 export type RepairOrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
 
+export type DeviceType = "phone" | "tablet";
+
 // ==================== CORE INTERFACES ====================
 
 export interface Brand {
@@ -17,7 +19,7 @@ export interface DeviceModel {
   _id?: ObjectId;
   brandId: ObjectId;
   name: string; // "model_name" → just "name"
-  type: string; // "device_type" → just "type"
+  type: DeviceType; // "device_type" → just "type" (enum: "phone" | "tablet")
   specifications?: string; // optional
   releaseYear: number;
   createdAt: Date;

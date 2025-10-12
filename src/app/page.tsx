@@ -1,62 +1,122 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Phone, Shield, Clock, Star } from "lucide-react";
 import Link from "next/link";
-import { useContactInfo } from "@/hooks/use-contact-info";
 import Image from "next/image";
+import { useContactInfo } from "@/hooks/use-contact-info";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const { contactInfo } = useContactInfo();
-  const carouselImages = [
+  const [typedText, setTypedText] = useState("");
+  const fullText = "Expert Telefoonreparaties in Hilversum";
+
+  useEffect(() => {
+    let currentIndex = 1;
+    setTypedText(fullText.slice(0, 1));
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setTypedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 40); // Typing speed in milliseconds
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
+  // Brand boxes data
+  const brandBoxes = [
     {
-      src: "/carousel-1.jpg",
-      alt: "Professionele telefoonreparatie technicus aan het werk met iPhone",
-      title: "Expert Telefoonreparaties",
-      description: "Professionele specialisten met jarenlange ervaring",
+      id: "apple",
+      title: "iPhone / iPad",
+      description: "Apple apparaten",
+      brandParam: "Apple",
+      logo: "/apple-logo.svg",
     },
     {
-      src: "/carousel-2.jpg",
-      alt: "Hoge kwaliteit telefoonscherm vervanging",
-      title: "Kwaliteit Onderdelen & Service",
-      description: "Originele onderdelen en uitgebreide garantie",
+      id: "samsung",
+      title: "Samsung",
+      description: "Galaxy smartphones & tablets",
+      brandParam: "Samsung",
+      logo: "/samsung-logo.svg",
     },
     {
-      src: "/carousel-3.jpg",
-      alt: "Snelle en betrouwbare telefoonreparatie service",
-      title: "Snel & Betrouwbaar",
-      description: "Reparaties op dezelfde dag beschikbaar voor de meeste problemen",
+      id: "other",
+      title: "Andere Merken",
+      description: "Google, Huawei, OnePlus & meer",
+      brandParam: "Other",
+      logo: null, // No logo for other brands
     },
   ];
 
   return (
-    <div className="min-h-screen ">
-      {/* Hero Section with Carousel */}
+    <div className="">
+      {/* Combined Hero and Brand Selection Section with Background Image */}
       <section className="relative">
-        <div className="container mx-auto px-0 md:px-4 py-2">
-          <div className="max-w-full mx-auto">
-            <Carousel className="w-full">
-              <CarouselContent>
-                {carouselImages.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="relative">
-                      <div className="aspect-video rounded-lg overflow-hidden shadow-2xl">
-                        <Image src={image.src} alt={image.alt} className="w-full h-full object-cover" width={1000} height={1000} />
-                        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                          <div className="text-center text-white p-8">
-                            <h2 className="text-2xl md:text-6xl font-bold mb-4">{image.title}</h2>
-                            <p className="text-xl md:text-2xl mb-8 max-w-2xl">{image.description}</p>
-                          </div>
+        {/* Background Image with Gradient Overlay - Covers both sections */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: "url('/carousel-1.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            filter: "blur(3px)",
+          }}
+        >
+          {/* Gradient Overlay - Top to Bottom */}
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-950/90 via-gray-900/70 to-gray-800/50"></div>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
+          <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white min-h-[4rem] md:min-h-[5rem]">
+              {typedText}
+              <span className="animate-pulse">|</span>
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-white/90">
+              Professionele reparaties met 3 maanden garantie. Snelle service met mogelijkheid op dezelfde dag.
+            </p>
+          </div>
+
+          {/* Brand Selection */}
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="text-lg text-white/90 drop-shadow">Selecteer het merk van uw apparaat om te beginnen:</p>
+            </div>
+
+            {/* Brand Boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {brandBoxes.map((brand) => (
+                <Link key={brand.id} href={`/book?brand=${brand.brandParam}`} className="group">
+                  <div className="relative rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 hover:-translate-y-2 cursor-pointer overflow-hidden md:h-64 h-48 border-2 border-white/20 hover:border-white/40 bg-white/10 backdrop-blur-md">
+                    <div className="relative h-full flex flex-col justify-center items-center p-8 space-y-4">
+                      {/* Brand Logo */}
+                      {brand.logo && (
+                        <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center relative">
+                          <Image
+                            src={brand.logo}
+                            alt={`${brand.title} logo`}
+                            fill
+                            className="object-contain filter brightness-0 invert"
+                            sizes="(max-width: 768px) 96px, 128px"
+                          />
                         </div>
+                      )}
+                      {/* Brand Text */}
+                      <div className="text-center">
+                        <h3 className="text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg">{brand.title}</h3>
+                        <p className="text-sm md:text-base text-white/90 drop-shadow">{brand.description}</p>
                       </div>
                     </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-4" />
-              <CarouselNext className="right-4" />
-            </Carousel>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -65,20 +125,12 @@ export default function Home() {
       <section className="py-8 md:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Uw Betrouwbare Telefoonreparatie Partner in Hilversum</h1>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Uw Betrouwbare Telefoonreparatie Partner in Hilversum</h2>
             <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
               Bij FixUphone specialiseren wij ons in professionele telefoonreparaties voor alle grote merken. Onze ervaren technici
               gebruiken originele én hoogwaardige after-market onderdelen en bieden 3 maanden garantie op alle reparaties. Van gebarsten
               schermen tot batterijvervangingen, wij zorgen voor snelle en betrouwbare service.
             </p>
-
-            {/* CTA Button */}
-            <div className="space-y-4 mb-12">
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-                <Link href="/book">Boek Nu Uw Reparatie</Link>
-              </Button>
-              <p className="text-sm text-gray-500">Gratis diagnose • Geen verplichting • Snelle service</p>
-            </div>
 
             {/* Features Grid */}
             <div className="grid md:grid-cols-4 gap-1 md:gap-6 md:mb-12">

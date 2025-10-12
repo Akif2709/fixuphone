@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === "development") {
   if (!globalWithMongo._mongoClientPromise) {
     client = new MongoClient(uri, options);
     globalWithMongo._mongoClientPromise = client.connect();
-    console.log('🔌 MongoDB connection initialized in production');
+    console.log("🔌 MongoDB connection initialized in production");
   }
   clientPromise = globalWithMongo._mongoClientPromise;
 }
@@ -68,8 +68,8 @@ export async function getDatabase(): Promise<Db> {
     const dbName = process.env.MONGODB_DB_NAME || "fixuphone";
     return client.db(dbName);
   } catch (error) {
-    console.error('❌ Failed to connect to MongoDB:', error);
-    throw new Error(`Database connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.error("❌ Failed to connect to MongoDB:", error);
+    throw new Error(`Database connection failed: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }
 

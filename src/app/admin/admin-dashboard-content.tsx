@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogOut, Settings, Package, Info, BarChart3 } from "lucide-react";
+import { LogOut, Settings, Package, Info, BarChart3, Smartphone } from "lucide-react";
 import { getAllRepairOrdersWithRelations } from "@/lib/database-actions";
 import { logoutAdmin } from "@/lib/database-actions/admin-actions";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import type { RepairOrderStatus } from "@/types";
 import { RecentOrdersTab } from "./tabs/recent-orders-tab";
 import { ContactInfoTab } from "./tabs/contact-info-tab";
 import { StatsTab } from "./tabs/stats-tab";
+import { DeviceModelsTab } from "./tabs/device-models-tab";
 
 interface RepairOrder {
   _id?: string;
@@ -123,14 +124,18 @@ export function AdminDashboardContent() {
 
         {/* Tabs */}
         <Tabs defaultValue="orders" className="w-full">
-          <TabsList className="grid w-full md:w-auto grid-cols-3 mb-6">
+          <TabsList className="grid w-full md:w-auto grid-cols-4 mb-6">
             <TabsTrigger value="orders" className="gap-2">
               <Package className="h-4 w-4" />
-              Recent Orders
+              Orders
+            </TabsTrigger>
+            <TabsTrigger value="devices" className="gap-2">
+              <Smartphone className="h-4 w-4" />
+              Devices
             </TabsTrigger>
             <TabsTrigger value="contact" className="gap-2">
               <Info className="h-4 w-4" />
-              Contact Info
+              Contact
             </TabsTrigger>
             <TabsTrigger value="stats" className="gap-2">
               <BarChart3 className="h-4 w-4" />
@@ -140,6 +145,10 @@ export function AdminDashboardContent() {
 
           <TabsContent value="orders">
             <RecentOrdersTab repairOrders={repairOrders} />
+          </TabsContent>
+
+          <TabsContent value="devices">
+            <DeviceModelsTab />
           </TabsContent>
 
           <TabsContent value="contact">

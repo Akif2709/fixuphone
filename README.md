@@ -16,6 +16,30 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 3. **NEVER commit `.env.local` to version control!**
 
+## Admin Tools
+
+### Initialize Contact Information
+
+Run this script to create the initial contact information in your database (required for first deployment):
+
+```bash
+node scripts/init-contact-info.mjs
+```
+
+### Reset Admin Password
+
+If you forgot your admin password or need to reset it:
+
+```bash
+node scripts/reset-admin-password.mjs
+```
+
+The script will prompt you for:
+
+- Admin username (default: `admin`)
+- New password
+- Password confirmation
+
 ## Getting Started
 
 First, run the development server:
