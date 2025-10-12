@@ -78,9 +78,6 @@ export default function Home() {
               {typedText}
               <span className="animate-pulse">|</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/90">
-              Professionele reparaties met 3 maanden garantie. Snelle service met mogelijkheid op dezelfde dag.
-            </p>
           </div>
 
           {/* Brand Selection */}
