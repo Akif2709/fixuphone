@@ -111,19 +111,13 @@ export async function getDeviceModelsWithBrands() {
 // ==================== BRAND-SPECIFIC QUERIES ====================
 
 /**
- * Get device models by brand ID (sorted by release year descending)
+ * Get device models by brand ID (sorted by release year descending at database level)
  */
 export async function getDeviceModelsByBrandId(brandId: string): Promise<{ success: boolean; data?: DeviceModel[]; error?: string }> {
   try {
+    // Sorting is done at database level for better performance
     const models = await DeviceModelModel.findByBrandId(brandId);
-    // Sort by release year descending, then by name
-    const sortedModels = models.sort((a, b) => {
-      if (b.releaseYear !== a.releaseYear) {
-        return b.releaseYear - a.releaseYear;
-      }
-      return a.name.localeCompare(b.name);
-    });
-    return { success: true, data: sortedModels };
+    return { success: true, data: models };
   } catch (error) {
     console.error("Error fetching device models by brand:", error);
     return { success: false, error: "Failed to fetch device models by brand" };

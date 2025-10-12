@@ -76,7 +76,9 @@ export default function Home() {
           <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white min-h-[4rem] md:min-h-[5rem]">
               {typedText}
-              <span className="animate-pulse">|</span>
+              {typedText !== fullText && (
+              <span className="animate-pulse ">|</span>
+              )}
             </h1>
           </div>
 

@@ -32,13 +32,13 @@ export class DeviceModelModel {
 
   static async findAll(): Promise<DeviceModel[]> {
     const collection = await this.getCollection();
-    return await collection.find().sort({ model_name: 1 }).toArray();
+    return await collection.find().sort({ releaseYear: -1, name: 1 }).toArray();
   }
 
   static async findByBrandId(brandId: string | ObjectId): Promise<DeviceModel[]> {
     const collection = await this.getCollection();
     const objectId = typeof brandId === "string" ? new ObjectId(brandId) : brandId;
-    return await collection.find({ brand_id: objectId }).sort({ model_name: 1 }).toArray();
+    return await collection.find({ brandId: objectId }).sort({ releaseYear: -1, name: 1 }).toArray();
   }
 
   static async findByQuery(query: DeviceModelQuery): Promise<DeviceModel[]> {
@@ -77,29 +77,12 @@ export class DeviceModelModel {
           $unwind: { path: "$brand", preserveNullAndEmptyArrays: true },
         },
         {
-          $sort: { name: 1 },
+          $sort: { releaseYear: -1, name: 1 },
         },
       ])
       .toArray();
 
     return results as Array<DeviceModel & { brand: Brand }>;
-  }
-
-  static async updateById(id: string | ObjectId, updateData: Partial<CreateDeviceModelRequest>): Promise<DeviceModel | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const updateDoc: Record<string, unknown> = {
-      ...updateData,
-    };
-
-    if (updateData.brandId) {
-      updateDoc.brandId = new ObjectId(updateData.brandId);
-    }
-
-    const result = await collection.findOneAndUpdate({ _id: objectId }, { $set: updateDoc }, { returnDocument: "after" });
-
-    return result ?? null;
   }
 
   static async deleteById(id: string | ObjectId): Promise<boolean> {

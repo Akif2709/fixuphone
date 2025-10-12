@@ -1,4 +1,4 @@
-import { Collection, ObjectId } from "mongodb";
+import { Collection } from "mongodb";
 import { getDatabase } from "../connection";
 import { Brand, CreateBrandRequest, BrandQuery } from "../../types";
 
@@ -23,12 +23,6 @@ export class BrandModel {
     return { ...brand, _id: result.insertedId };
   }
 
-  static async findById(id: string | ObjectId): Promise<Brand | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-    return await collection.findOne({ _id: objectId });
-  }
-
   static async findAll(): Promise<Brand[]> {
     const collection = await this.getCollection();
     return await collection.find().sort({ name: 1 }).toArray();
@@ -43,22 +37,5 @@ export class BrandModel {
     }
 
     return await collection.find(filter).sort({ name: 1 }).toArray();
-  }
-
-  static async updateById(id: string | ObjectId, updateData: Partial<CreateBrandRequest>): Promise<Brand | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const result = await collection.findOneAndUpdate({ _id: objectId }, { $set: updateData }, { returnDocument: "after" });
-
-    return result ?? null;
-  }
-
-  static async deleteById(id: string | ObjectId): Promise<boolean> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const result = await collection.deleteOne({ _id: objectId });
-    return result.deletedCount > 0;
   }
 }
