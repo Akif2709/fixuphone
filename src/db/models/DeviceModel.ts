@@ -24,21 +24,9 @@ export class DeviceModelModel {
     return { ...deviceModel, _id: result.insertedId };
   }
 
-  static async findById(id: string | ObjectId): Promise<DeviceModel | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-    return await collection.findOne({ _id: objectId });
-  }
-
   static async findAll(): Promise<DeviceModel[]> {
     const collection = await this.getCollection();
     return await collection.find().sort({ releaseYear: -1, name: 1 }).toArray();
-  }
-
-  static async findByBrandId(brandId: string | ObjectId): Promise<DeviceModel[]> {
-    const collection = await this.getCollection();
-    const objectId = typeof brandId === "string" ? new ObjectId(brandId) : brandId;
-    return await collection.find({ brandId: objectId }).sort({ releaseYear: -1, name: 1 }).toArray();
   }
 
   static async findByQuery(query: DeviceModelQuery): Promise<DeviceModel[]> {

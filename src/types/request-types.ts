@@ -18,8 +18,6 @@ export interface CreateDeviceModelRequest {
 export interface CreateRepairTypeRequest {
   name: string;
   description?: string;
-  category: string;
-  isActive?: boolean;
 }
 
 export interface CreateRepairServiceRequest {

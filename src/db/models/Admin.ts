@@ -101,37 +101,4 @@ export class AdminModel {
     await collection.updateOne({ _id: objectId }, { $set: { lastLogin: new Date() } });
   }
 
-  /**
-   * Change admin password
-   */
-  static async changePassword(adminId: string | ObjectId, newPassword: string): Promise<void> {
-    const collection = await this.getCollection();
-    const objectId = typeof adminId === "string" ? new ObjectId(adminId) : adminId;
-
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-    await collection.updateOne({ _id: objectId }, { $set: { password: hashedPassword } });
-  }
-
-  /**
-   * Deactivate admin account
-   */
-  static async deactivate(adminId: string | ObjectId): Promise<void> {
-    const collection = await this.getCollection();
-    const objectId = typeof adminId === "string" ? new ObjectId(adminId) : adminId;
-
-    await collection.updateOne({ _id: objectId }, { $set: { isActive: false } });
-  }
-
-  /**
-   * Get admin stats
-   */
-  static async getStats(): Promise<{ totalAdmins: number; activeAdmins: number }> {
-    const collection = await this.getCollection();
-
-    const [totalAdmins, activeAdmins] = await Promise.all([collection.countDocuments(), collection.countDocuments({ isActive: true })]);
-
-    return { totalAdmins, activeAdmins };
-  }
 }

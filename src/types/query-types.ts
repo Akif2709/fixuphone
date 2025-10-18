@@ -14,8 +14,6 @@ export interface DeviceModelQuery {
 
 export interface RepairTypeQuery {
   name?: string;
-  category?: string;
-  isActive?: boolean;
 }
 
 export interface RepairServiceQuery {

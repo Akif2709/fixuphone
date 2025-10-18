@@ -4,6 +4,7 @@ import { DeviceModelModel } from "../models/DeviceModel";
 import { RepairTypeModel } from "../models/RepairType";
 import { RepairServiceModel } from "../models/RepairService";
 import { RepairOrderModel } from "../models/RepairOrder";
+import { ContactInfoModel } from "../models/ContactInfo";
 import { Db } from "mongodb";
 
 // Import all schemas
@@ -102,36 +103,26 @@ async function insertSampleData() {
     const screenRepair = await RepairTypeModel.create({
       name: "Screen Repair",
       description: "Fix cracked or broken screen",
-      category: "Display",
-      isActive: true,
     });
 
     const batteryReplacement = await RepairTypeModel.create({
       name: "Battery Replacement",
       description: "Replace old or faulty battery",
-      category: "Power",
-      isActive: true,
     });
 
     const waterDamage = await RepairTypeModel.create({
       name: "Water Damage Repair",
       description: "Fix water damage issues",
-      category: "General",
-      isActive: true,
     });
 
     const chargingPort = await RepairTypeModel.create({
       name: "Charging Port Repair",
       description: "Fix charging port issues",
-      category: "Power",
-      isActive: true,
     });
 
     const cameraRepair = await RepairTypeModel.create({
       name: "Camera Repair",
       description: "Fix camera functionality",
-      category: "Camera",
-      isActive: true,
     });
 
     console.log("✅ Sample repair types created");
@@ -233,11 +224,35 @@ async function insertSampleData() {
       console.log("✅ Sample repair order created");
     }
 
-    // Create sample contact info using migration
-    const { migrateContactDataToDatabase } = await import("../../lib/db-migrations/contact-migration");
-    await migrateContactDataToDatabase();
+    // Create sample contact info
+    await ContactInfoModel.initialize({
+      businessName: "fixUphone",
+      phone: "+31 6 12345678",
+      whatsapp: "+31612345678",
+      email: "info@fixuphone.nl",
+      address: {
+        street: "Kalverstraat 1",
+        postalCode: "1012 NX",
+        city: "Amsterdam",
+        country: "Nederland",
+        fullAddress: "Kalverstraat 1, 1012 NX Amsterdam, Nederland",
+      },
+      mapEmbed: {
+        src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2435.7267897374716!2d4.891682615743!3d52.37239997978741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c609c8c3e8c7e5%3A0x4e1f6d8a3d8d8d8d!2sKalverstraat%201%2C%201012%20NX%20Amsterdam!5e0!3m2!1sen!2snl!4v1234567890",
+        title: "fixUphone Location",
+      },
+      businessHours: [
+        { day: "Monday", dayId: "mon", isOpen: true, openTime: "09:00", closeTime: "18:00" },
+        { day: "Tuesday", dayId: "tue", isOpen: true, openTime: "09:00", closeTime: "18:00" },
+        { day: "Wednesday", dayId: "wed", isOpen: true, openTime: "09:00", closeTime: "18:00" },
+        { day: "Thursday", dayId: "thu", isOpen: true, openTime: "09:00", closeTime: "18:00" },
+        { day: "Friday", dayId: "fri", isOpen: true, openTime: "09:00", closeTime: "18:00" },
+        { day: "Saturday", dayId: "sat", isOpen: true, openTime: "10:00", closeTime: "17:00" },
+        { day: "Sunday", dayId: "sun", isOpen: false, openTime: "00:00", closeTime: "00:00" },
+      ],
+    });
 
-    console.log("✅ Sample contact info created via migration");
+    console.log("✅ Sample contact info created");
 
     console.log("✅ Sample data insertion completed");
   } catch (error) {

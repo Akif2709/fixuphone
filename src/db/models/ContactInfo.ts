@@ -42,40 +42,6 @@ export class ContactInfoModel {
   }
 
   /**
-   * Create or update the single contact info record
-   * Uses upsert to either create new record or update existing one
-   */
-  static async upsert(data: CreateContactInfoRequest): Promise<ContactInfo> {
-    try {
-      const collection = await this.getCollection();
-      const now = new Date();
-
-      const contactInfo: ContactInfo = {
-        ...data,
-        createdAt: now,
-      };
-
-      // Use upsert to either update existing record or create new one
-      const result = await collection.findOneAndUpdate(
-        {},
-        {
-          $set: contactInfo,
-          $setOnInsert: { createdAt: now },
-        },
-        {
-          upsert: true,
-          returnDocument: "after",
-        }
-      );
-
-      return result!;
-    } catch (error) {
-      console.error("Error upserting contact info:", error);
-      throw new Error(`Failed to upsert contact info: ${error instanceof Error ? error.message : "Unknown error"}`);
-    }
-  }
-
-  /**
    * Initialize contact info with default data
    * This should only be called during migration/setup
    */

@@ -1,6 +1,6 @@
 import { Collection, ObjectId } from "mongodb";
 import { getDatabase } from "../connection";
-import { RepairService, CreateRepairServiceRequest, RepairServiceQuery, DeviceModel, Brand, RepairType } from "../../types";
+import { RepairService, CreateRepairServiceRequest, DeviceModel, Brand, RepairType } from "../../types";
 
 export class RepairServiceModel {
   private static collectionName = "repair_services";
@@ -35,57 +35,15 @@ export class RepairServiceModel {
     }
   }
 
-  static async findById(id: string | ObjectId): Promise<RepairService | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-    return await collection.findOne({ _id: objectId });
-  }
-
   static async findAll(): Promise<RepairService[]> {
     const collection = await this.getCollection();
-    return await collection.find().sort({ issue_name: 1 }).toArray();
-  }
-
-  static async findActive(): Promise<RepairService[]> {
-    const collection = await this.getCollection();
-    return await collection.find({ is_active: true }).sort({ issue_name: 1 }).toArray();
+    return await collection.find({}).sort({ createdAt: -1 }).toArray();
   }
 
   static async findByDeviceModelId(deviceModelId: string | ObjectId): Promise<RepairService[]> {
     const collection = await this.getCollection();
     const objectId = typeof deviceModelId === "string" ? new ObjectId(deviceModelId) : deviceModelId;
-    return await collection.find({ device_model_id: objectId }).sort({ issue_name: 1 }).toArray();
-  }
-
-  static async findActiveByDeviceModelId(deviceModelId: string | ObjectId): Promise<RepairService[]> {
-    const collection = await this.getCollection();
-    const objectId = typeof deviceModelId === "string" ? new ObjectId(deviceModelId) : deviceModelId;
-    return await collection
-      .find({
-        device_model_id: objectId,
-        is_active: true,
-      })
-      .sort({ issue_name: 1 })
-      .toArray();
-  }
-
-  static async findByQuery(query: RepairServiceQuery): Promise<RepairService[]> {
-    const collection = await this.getCollection();
-    const filter: Record<string, unknown> = {};
-
-    if (query.deviceModelId) {
-      filter.deviceModelId = new ObjectId(query.deviceModelId);
-    }
-
-    if (query.repairTypeId) {
-      filter.repairTypeId = new ObjectId(query.repairTypeId);
-    }
-
-    if (query.isActive !== undefined) {
-      filter.isActive = query.isActive;
-    }
-
-    return await collection.find(filter).sort({ createdAt: -1 }).toArray();
+    return await collection.find({ deviceModelId: objectId }).sort({ createdAt: -1 }).toArray();
   }
 
   static async findAllWithDeviceModels(): Promise<
@@ -158,31 +116,4 @@ export class RepairServiceModel {
     return result ?? null;
   }
 
-  static async toggleActiveStatus(id: string | ObjectId): Promise<RepairService | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const repairService = await collection.findOne({ _id: objectId });
-    if (!repairService) return null;
-
-    const result = await collection.findOneAndUpdate(
-      { _id: objectId },
-      {
-        $set: {
-          isActive: !repairService.isActive,
-        },
-      },
-      { returnDocument: "after" }
-    );
-
-    return result ?? null;
-  }
-
-  static async deleteById(id: string | ObjectId): Promise<boolean> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const result = await collection.deleteOne({ _id: objectId });
-    return result.deletedCount > 0;
-  }
 }

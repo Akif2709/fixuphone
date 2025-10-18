@@ -31,8 +31,6 @@ export interface RepairType {
   _id?: ObjectId;
   name: string;
   description?: string; // optional
-  category: string;
-  isActive: boolean;
   createdAt: Date;
 }
 

@@ -29,8 +29,6 @@ export interface SerializedRepairType {
   _id?: string;
   name: string;
   description?: string;
-  category: string;
-  isActive: boolean;
   createdAt: string;
 }
 

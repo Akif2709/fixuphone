@@ -1,7 +1,7 @@
 "use server";
 
 import { ContactInfoModel } from "../../db/models/ContactInfo";
-import { CreateContactInfoRequest, SerializedContactInfo } from "../../types";
+import { SerializedContactInfo, CreateContactInfoRequest } from "../../types";
 import { revalidatePath } from "next/cache";
 
 // ==================== CONTACT INFO OPERATIONS ====================
@@ -57,25 +57,3 @@ export async function updateContactInfo(
   }
 }
 
-/**
- * Create or update the single contact info record
- */
-export async function upsertContactInfo(
-  data: CreateContactInfoRequest
-): Promise<{ success: true; data: SerializedContactInfo } | { success: false; error: string }> {
-  try {
-    const contactInfo = await ContactInfoModel.upsert(data);
-
-    // Serialize the data to convert ObjectId to string
-    const serializedData = {
-      ...contactInfo,
-      _id: contactInfo._id?.toString(),
-    };
-
-    revalidatePath("/contact");
-    return { success: true, data: serializedData };
-  } catch (error) {
-    console.error("Error upserting contact info:", error);
-    return { success: false, error: "Failed to upsert contact info" };
-  }
-}

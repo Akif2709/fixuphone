@@ -4,7 +4,7 @@ export const repairServicesSchema: CreateCollectionOptions = {
   validator: {
     $jsonSchema: {
       bsonType: "object",
-      required: ["deviceModelId", "repairTypeId", "price", "estimatedTimeMinutes", "isActive", "createdAt"],
+      required: ["deviceModelId", "repairTypeId", "price", "estimatedTimeMinutes", "createdAt"],
       properties: {
         deviceModelId: {
           bsonType: "objectId",
@@ -28,10 +28,6 @@ export const repairServicesSchema: CreateCollectionOptions = {
           minimum: 1,
           description: "Estimated time is required and must be at least 1 minute",
         },
-        isActive: {
-          bsonType: "bool",
-          description: "Is active is required and must be a boolean",
-        },
         createdAt: {
           bsonType: "date",
           description: "Created date is required and must be a date",
@@ -44,6 +40,4 @@ export const repairServicesSchema: CreateCollectionOptions = {
 export const repairServicesIndexes: IndexDescription[] = [
   { key: { deviceModelId: 1 }, name: "repair_service_deviceModelIdx" },
   { key: { repairTypeId: 1 }, name: "repair_service_repair_type_idx" },
-  { key: { isActive: 1 }, name: "repair_service_active_idx" },
-  { key: { price: 1 }, name: "repair_service_price_idx" },
 ];

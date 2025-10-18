@@ -344,7 +344,7 @@ function BookPageContent() {
                           <FormItem>
                             <FormLabel>Merk *</FormLabel>
                             <Select
-                              onValueChange={(value) => {
+                              onValueChange={(value:string) => {
                                 field.onChange(value);
                                 setSelectedBrand(value);
                                 setSelectedModel("");
@@ -387,7 +387,7 @@ function BookPageContent() {
                             <FormItem>
                               <FormLabel>Apparaat Model *</FormLabel>
                               <Select
-                                onValueChange={(value) => {
+                                onValueChange={(value:string) => {
                                   field.onChange(value);
                                   setSelectedModel(value);
                                 }}

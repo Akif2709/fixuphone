@@ -1,19 +1,9 @@
 "use server";
 
 import { BrandModel } from "../../db/models/Brand";
-import { CreateBrandRequest, SerializedBrand } from "../../types";
+import { SerializedBrand } from "../../types";
 
 // ==================== BRAND OPERATIONS ====================
-
-export async function createBrand(data: CreateBrandRequest) {
-  try {
-    const brand = await BrandModel.create(data);
-    return { success: true, data: brand };
-  } catch (error) {
-    console.error("Error creating brand:", error);
-    return { success: false, error: "Failed to create brand" };
-  }
-}
 
 export async function getAllBrands(): Promise<{
   success: boolean;

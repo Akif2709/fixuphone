@@ -1,6 +1,6 @@
 import { Collection, ObjectId } from "mongodb";
 import { getDatabase } from "../connection";
-import { RepairOrder, CreateRepairOrderRequest, RepairOrderQuery, DeviceModel, RepairService, Brand, RepairOrderStatus } from "../../types";
+import { RepairOrder, CreateRepairOrderRequest, DeviceModel, RepairService, Brand } from "../../types";
 
 // Interface for repair orders with populated relations
 interface RepairOrderWithRelations extends RepairOrder {
@@ -63,60 +63,6 @@ export class RepairOrderModel {
     }
   }
 
-  static async findById(id: string | ObjectId): Promise<RepairOrder | null> {
-    try {
-      const collection = await this.getCollection();
-      const objectId = typeof id === "string" ? new ObjectId(id) : id;
-      return await collection.findOne({ _id: objectId });
-    } catch (error) {
-      console.error("Error finding repair order by ID:", error);
-      throw new Error(`Failed to find repair order: ${error instanceof Error ? error.message : "Unknown error"}`);
-    }
-  }
-
-  static async findByOrderNumber(orderNumber: string): Promise<RepairOrder | null> {
-    const collection = await this.getCollection();
-    return await collection.findOne({ orderNumber: orderNumber });
-  }
-
-  static async findAll(): Promise<RepairOrder[]> {
-    const collection = await this.getCollection();
-    return await collection.find().sort({ createdAt: -1 }).toArray();
-  }
-
-  static async findByStatus(status: RepairOrderStatus): Promise<RepairOrder[]> {
-    const collection = await this.getCollection();
-    return await collection.find({ status }).sort({ createdAt: -1 }).toArray();
-  }
-
-  static async findByCustomerEmail(email: string): Promise<RepairOrder[]> {
-    const collection = await this.getCollection();
-    return await collection.find({ customerEmail: email }).sort({ createdAt: -1 }).toArray();
-  }
-
-  static async findByQuery(query: RepairOrderQuery): Promise<RepairOrder[]> {
-    const collection = await this.getCollection();
-    const filter: Record<string, unknown> = {};
-
-    if (query.status) {
-      filter.status = query.status;
-    }
-
-    if (query.customerEmail) {
-      filter.customerEmail = { $regex: query.customerEmail, $options: "i" };
-    }
-
-    if (query.deviceModelId) {
-      filter.deviceModelId = new ObjectId(query.deviceModelId);
-    }
-
-    if (query.repairServiceId) {
-      filter.repairServiceId = new ObjectId(query.repairServiceId);
-    }
-
-    return await collection.find(filter).sort({ createdAt: -1 }).toArray();
-  }
-
   static async findAllWithRelations(): Promise<RepairOrderWithRelations[]> {
     const collection = await this.getCollection();
 
@@ -160,63 +106,6 @@ export class RepairOrderModel {
         },
       ])
       .toArray();
-  }
-
-  static async updateById(id: string | ObjectId, updateData: Partial<CreateRepairOrderRequest>): Promise<RepairOrder | null> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const updateDoc: Record<string, unknown> = {
-      ...updateData,
-      updatedAt: new Date(),
-    };
-
-    if (updateData.deviceModelId) {
-      updateDoc.deviceModelId = new ObjectId(updateData.deviceModelId);
-    }
-
-    if (updateData.repairServiceId) {
-      updateDoc.repairServiceId = new ObjectId(updateData.repairServiceId);
-    }
-
-    const result = await collection.findOneAndUpdate({ _id: objectId }, { $set: updateDoc }, { returnDocument: "after" });
-
-    return result ?? null;
-  }
-
-  static async updateStatus(id: string | ObjectId, status: string, technicianNotes?: string): Promise<RepairOrder | null> {
-    try {
-      const collection = await this.getCollection();
-      const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-      const updateDoc: Record<string, unknown> = {
-        status,
-        updatedAt: new Date(),
-      };
-
-      if (technicianNotes) {
-        updateDoc.technicianNotes = technicianNotes;
-      }
-
-      if (status === "completed") {
-        updateDoc.actualCompletion = new Date();
-      }
-
-      const result = await collection.findOneAndUpdate({ _id: objectId }, { $set: updateDoc }, { returnDocument: "after" });
-
-      return result ?? null;
-    } catch (error) {
-      console.error("Error updating repair order status:", error);
-      throw new Error(`Failed to update repair order status: ${error instanceof Error ? error.message : "Unknown error"}`);
-    }
-  }
-
-  static async deleteById(id: string | ObjectId): Promise<boolean> {
-    const collection = await this.getCollection();
-    const objectId = typeof id === "string" ? new ObjectId(id) : id;
-
-    const result = await collection.deleteOne({ _id: objectId });
-    return result.deletedCount > 0;
   }
 
   static async getStats(): Promise<{

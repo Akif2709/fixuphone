@@ -166,32 +166,3 @@ export async function createAdmin(data: CreateAdminRequest): Promise<{
   }
 }
 
-/**
- * Change admin password
- */
-export async function changeAdminPassword(
-  adminId: string,
-  currentPassword: string,
-  newPassword: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    // Verify current password
-    const admin = await AdminModel.findById(adminId);
-    if (!admin) {
-      return { success: false, error: "Admin not found" };
-    }
-
-    const isCurrentPasswordValid = await AdminModel.verifyCredentials(admin.username, currentPassword);
-    if (!isCurrentPasswordValid) {
-      return { success: false, error: "Current password is incorrect" };
-    }
-
-    // Update password
-    await AdminModel.changePassword(adminId, newPassword);
-
-    return { success: true };
-  } catch (error) {
-    console.error("Change password error:", error);
-    return { success: false, error: "Failed to change password" };
-  }
-}
