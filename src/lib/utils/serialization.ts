@@ -61,3 +61,24 @@ export function serializeRepairService(service: RepairService): SerializedRepair
 export function serializeRepairServices(services: RepairService[]): SerializedRepairService[] {
   return services.map(serializeRepairService);
 }
+
+/**
+ * Serialize RepairService with RepairType for client components
+ */
+export function serializeRepairServiceWithType(
+  service: RepairService & { repairType: RepairType }
+): SerializedRepairService & { repairType: SerializedRepairType } {
+  return {
+    ...serializeRepairService(service),
+    repairType: serializeRepairType(service.repairType),
+  };
+}
+
+/**
+ * Serialize array of RepairService objects with RepairType
+ */
+export function serializeRepairServicesWithTypes(
+  services: Array<RepairService & { repairType: RepairType }>
+): Array<SerializedRepairService & { repairType: SerializedRepairType }> {
+  return services.map(serializeRepairServiceWithType);
+}

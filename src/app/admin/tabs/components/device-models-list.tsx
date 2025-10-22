@@ -108,7 +108,9 @@ export function DeviceModelsList({
                                         <div key={repairType._id} className="flex items-center gap-3 p-3 border rounded bg-gray-50">
                                           <div className="flex-1">
                                             <div className="font-medium text-sm">{repairType.name}</div>
-                                            {repairType.description && <div className="text-xs text-gray-500">{repairType.description}</div>}
+                                            {repairType.description && (
+                                              <div className="text-xs text-gray-500">{repairType.description}</div>
+                                            )}
                                           </div>
                                           <div className="flex items-center gap-2">
                                             <div className="space-y-1">
@@ -180,4 +182,3 @@ export function DeviceModelsList({
     </Card>
   );
 }
-

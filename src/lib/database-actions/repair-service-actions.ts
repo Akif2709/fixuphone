@@ -2,7 +2,7 @@
 
 import { RepairServiceModel } from "../../db/models/RepairService";
 import { CreateRepairServiceRequest } from "../../types";
-import { serializeRepairService, serializeRepairServices } from "../utils/serialization";
+import { serializeRepairService, serializeRepairServices, serializeRepairServicesWithTypes } from "../utils/serialization";
 
 // ==================== REPAIR SERVICE OPERATIONS ====================
 
@@ -43,6 +43,16 @@ export async function getRepairServicesWithDeviceModels() {
   } catch (error) {
     console.error("Error fetching repair services with device models:", error);
     return { success: false, error: "Failed to fetch repair services with device models" };
+  }
+}
+
+export async function getAllRepairServicesWithRepairTypes() {
+  try {
+    const repairServices = await RepairServiceModel.findAllWithRepairTypes();
+    return { success: true, data: serializeRepairServicesWithTypes(repairServices) };
+  } catch (error) {
+    console.error("Error fetching all repair services with repair types:", error);
+    return { success: false, error: "Failed to fetch all repair services with repair types" };
   }
 }
 

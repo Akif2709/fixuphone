@@ -5,27 +5,9 @@ import { Phone, Shield, Clock, Star } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useContactInfo } from "@/hooks/use-contact-info";
-import { useState, useEffect } from "react";
 
 export default function Home() {
   const { contactInfo } = useContactInfo();
-  const [typedText, setTypedText] = useState("");
-  const fullText = "Expert Telefoonreparaties in Hilversum";
-
-  useEffect(() => {
-    let currentIndex = 1;
-    setTypedText(fullText.slice(0, 1));
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setTypedText(fullText.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 40); // Typing speed in milliseconds
-
-    return () => clearInterval(typingInterval);
-  }, []);
 
   // Brand boxes data
   const brandBoxes = [
@@ -74,12 +56,7 @@ export default function Home() {
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
           <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white min-h-[4rem] md:min-h-[5rem]">
-              {typedText}
-              {typedText !== fullText && (
-              <span className="animate-pulse ">|</span>
-              )}
-            </h1>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">Expert Telefoonreparaties in Hilversum</h1>
           </div>
 
           {/* Brand Selection */}

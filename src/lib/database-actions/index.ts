@@ -13,6 +13,7 @@ export {
   getAllRepairServices,
   getRepairServicesByDeviceModel,
   getRepairServicesWithDeviceModels,
+  getAllRepairServicesWithRepairTypes,
   updateRepairService,
 } from "./repair-service-actions";
 

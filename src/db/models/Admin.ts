@@ -100,5 +100,4 @@ export class AdminModel {
 
     await collection.updateOne({ _id: objectId }, { $set: { lastLogin: new Date() } });
   }
-
 }

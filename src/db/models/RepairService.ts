@@ -46,6 +46,31 @@ export class RepairServiceModel {
     return await collection.find({ deviceModelId: objectId }).sort({ createdAt: -1 }).toArray();
   }
 
+  static async findAllWithRepairTypes(): Promise<Array<RepairService & { repairType: RepairType }>> {
+    const collection = await this.getCollection();
+
+    const results = await collection
+      .aggregate([
+        {
+          $lookup: {
+            from: "repair_types",
+            localField: "repairTypeId",
+            foreignField: "_id",
+            as: "repairType",
+          },
+        },
+        {
+          $unwind: { path: "$repairType", preserveNullAndEmptyArrays: true },
+        },
+        {
+          $sort: { createdAt: -1 },
+        },
+      ])
+      .toArray();
+
+    return results as Array<RepairService & { repairType: RepairType }>;
+  }
+
   static async findAllWithDeviceModels(): Promise<
     Array<RepairService & { deviceModel: DeviceModel; brand: Brand; repairType: RepairType }>
   > {
@@ -115,5 +140,4 @@ export class RepairServiceModel {
 
     return result ?? null;
   }
-
 }

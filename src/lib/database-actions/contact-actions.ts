@@ -56,4 +56,3 @@ export async function updateContactInfo(
     return { success: false, error: "Failed to update contact info" };
   }
 }
-

@@ -46,7 +46,7 @@ export class RepairTypeModel {
   static async findAll(): Promise<RepairType[]> {
     try {
       const collection = await this.getCollection();
-      return await collection.find().sort({ name: 1 }).toArray();
+      return await collection.find().toArray();
     } catch (error) {
       console.error("Error fetching all repair types:", error);
       throw new Error(`Failed to fetch repair types: ${error instanceof Error ? error.message : "Unknown error"}`);

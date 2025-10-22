@@ -165,4 +165,3 @@ export async function createAdmin(data: CreateAdminRequest): Promise<{
     };
   }
 }
-

@@ -149,7 +149,7 @@ export function DeviceModelsTab() {
 
       // Filter repair services for this device from allRepairServices
       const deviceServices = allRepairServices.filter((service) => service.deviceModelId === deviceId);
-      
+
       setRepairServices((prev) => ({
         ...prev,
         [deviceId]: deviceServices,
@@ -158,16 +158,16 @@ export function DeviceModelsTab() {
       // Prefill price and time inputs from existing services
       const newPriceInputs: Record<string, string> = {};
       const newTimeInputs: Record<string, string> = {};
-      
+
       deviceServices.forEach((service) => {
         const key = `${deviceId}-${service.repairTypeId}`;
         newPriceInputs[key] = service.price.toString();
         newTimeInputs[key] = service.estimatedTimeMinutes.toString();
       });
-      
+
       setPriceInputs((prev) => ({ ...prev, ...newPriceInputs }));
       setEstimatedTimeInputs((prev) => ({ ...prev, ...newTimeInputs }));
-      
+
       console.log(`Loaded ${deviceServices.length} repair services for device ${deviceId}`);
     }
 
@@ -193,21 +193,17 @@ export function DeviceModelsTab() {
 
     try {
       // Find existing service from allRepairServices
-      const existingService = allRepairServices.find(
-        (s) => s.deviceModelId === deviceId && s.repairTypeId === repairTypeId
-      );
+      const existingService = allRepairServices.find((s) => s.deviceModelId === deviceId && s.repairTypeId === repairTypeId);
 
       let result;
       if (existingService && existingService._id) {
         // Update existing service
-        console.log(`Updating existing service: ${existingService._id}`);
         result = await updateRepairService(existingService._id, {
           price,
           estimatedTimeMinutes: estimatedTime,
         });
       } else {
         // Create new service
-        console.log(`Creating new service for device ${deviceId} and repair type ${repairTypeId}`);
         result = await createRepairService({
           deviceModelId: deviceId,
           repairTypeId,
@@ -220,11 +216,7 @@ export function DeviceModelsTab() {
         // Update allRepairServices state
         if (existingService) {
           // Update existing service in the array
-          setAllRepairServices((prev) =>
-            prev.map((service) =>
-              service._id === existingService._id ? result.data! : service
-            )
-          );
+          setAllRepairServices((prev) => prev.map((service) => (service._id === existingService._id ? result.data! : service)));
         } else {
           // Add new service to the array
           setAllRepairServices((prev) => [...prev, result.data!]);
@@ -233,10 +225,8 @@ export function DeviceModelsTab() {
         // Update the repairServices for this device
         const updatedDeviceServices = allRepairServices
           .filter((service) => service.deviceModelId === deviceId)
-          .map((service) => 
-            service._id === existingService?._id ? result.data! : service
-          );
-        
+          .map((service) => (service._id === existingService?._id ? result.data! : service));
+
         if (!existingService) {
           updatedDeviceServices.push(result.data);
         }
@@ -249,7 +239,6 @@ export function DeviceModelsTab() {
         // Update the input fields with the saved values
         setPriceInputs((prev) => ({ ...prev, [key]: price.toString() }));
         setEstimatedTimeInputs((prev) => ({ ...prev, [key]: estimatedTime.toString() }));
-
       } else {
         alert(`Fout bij opslaan: ${result.error}`);
       }
@@ -309,11 +298,7 @@ export function DeviceModelsTab() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brandId">Merk *</Label>
-                <Select
-                  value={formData.brandId}
-                  onValueChange={(value: string) => setFormData({ ...formData, brandId: value })}
-                  required
-                >
+                <Select value={formData.brandId} onValueChange={(value: string) => setFormData({ ...formData, brandId: value })} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecteer merk" />
                   </SelectTrigger>
@@ -340,13 +325,7 @@ export function DeviceModelsTab() {
 
               <div className="space-y-2">
                 <Label htmlFor="type">Type *</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value: DeviceType) =>
-                    setFormData({ ...formData, type: value })
-                  }
-                  required
-                >
+                <Select value={formData.type} onValueChange={(value: DeviceType) => setFormData({ ...formData, type: value })} required>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

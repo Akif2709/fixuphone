@@ -9,14 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { repairServices } from "@/lib/repair-data";
 import { sendBookingConfirmationEmail, generateBookingId, type BookingEmailData } from "@/lib/services/email-service";
 import { getAvailableTimeSlotsForDay } from "@/lib/utils/timeslot-utils";
 import { useContactInfo } from "@/hooks/use-contact-info";
 import { Calendar, Phone, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getAllBrands, getAllDeviceModels } from "@/lib/database-actions";
-import { SerializedDeviceModel, SerializedBrand } from "@/types";
+import { getAllBrands, getAllDeviceModels, getAllRepairServicesWithRepairTypes, getAllRepairTypes } from "@/lib/database-actions";
+import { SerializedDeviceModel, SerializedBrand, SerializedRepairService, SerializedRepairType } from "@/types";
+import { PriceDisplay } from "@/components/price-display";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 
 const bookingSchema = z
   .object({
@@ -53,7 +54,9 @@ function BookPageContent() {
   const { contactInfo, loading: contactLoading } = useContactInfo();
   const [brands, setBrands] = useState<SerializedBrand[]>([]);
   const [allDeviceModels, setAllDeviceModels] = useState<SerializedDeviceModel[]>([]);
+  const [allRepairServices, setAllRepairServices] = useState<Array<SerializedRepairService & { repairType: SerializedRepairType }>>([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [allRepairTypes, setRepairTypes] = useState<Array<SerializedRepairType>>([]);
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [, setSelectedModel] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,6 +68,7 @@ function BookPageContent() {
     dayName: string;
     dateFormatted: string;
   } | null>(null);
+  const [calendarDate, setCalendarDate] = useState<Date | undefined>(undefined);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
 
@@ -83,11 +87,16 @@ function BookPageContent() {
     },
   });
 
-  // Fetch brands and device models on mount
+  // Fetch brands, device models, and repair services on mount
   useEffect(() => {
     async function fetchData() {
       try {
-        const [brandsResult, modelsResult] = await Promise.all([getAllBrands(), getAllDeviceModels()]);
+        const [brandsResult, modelsResult, repairServicesResult, repairTypesResult] = await Promise.all([
+          getAllBrands(),
+          getAllDeviceModels(),
+          getAllRepairServicesWithRepairTypes(),
+          getAllRepairTypes(),
+        ]);
 
         if (brandsResult.success && brandsResult.data) {
           setBrands(brandsResult.data);
@@ -99,6 +108,18 @@ function BookPageContent() {
           setAllDeviceModels(modelsResult.data);
         } else {
           console.error("Failed to fetch device models:", modelsResult.error);
+        }
+
+        if (repairServicesResult.success && repairServicesResult.data) {
+          setAllRepairServices(repairServicesResult.data);
+        } else {
+          console.error("Failed to fetch repair services:", repairServicesResult.error);
+        }
+
+        if (repairTypesResult.success && repairTypesResult.data) {
+          setRepairTypes(repairTypesResult.data);
+        } else {
+          console.error("Failed to fetch repair types:", repairTypesResult.error);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -190,41 +211,53 @@ function BookPageContent() {
     return getAvailableTimeSlotsForDay(selectedDateObj.dayId, contactInfo.businessHours);
   };
 
-  // Get available days (next 14 days)
-  const getAvailableDays = () => {
-    const days = [];
-    const today = new Date();
+  // Check if a specific date is a business day
+  const isBusinessDay = (date: Date) => {
+    if (!contactInfo?.businessHours) return true; // If no business hours, allow all days
 
-    for (let i = 0; i < 14; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+    const dayOfWeek = date.getDay();
+    const dayMapping = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    const dayId = dayMapping[dayOfWeek];
 
-      const dayOfWeek = date.getDay();
-      const dayMapping = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-      const dayId = dayMapping[dayOfWeek];
+    const timeSlots = getAvailableTimeSlotsForDay(dayId, contactInfo.businessHours);
+    return timeSlots.length > 0;
+  };
 
-      const timeSlots = contactInfo?.businessHours ? getAvailableTimeSlotsForDay(dayId, contactInfo.businessHours) : [];
-      if (timeSlots.length > 0) {
-        days.push({
-          date: date.toISOString().split("T")[0],
-          dayId,
-          dayName: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"][dayOfWeek],
-          dateFormatted: (() => {
-            const weekday = date.toLocaleDateString("nl-NL", {
-              weekday: "long",
-            });
-            const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
-            const datePart = date.toLocaleDateString("nl-NL", {
-              day: "numeric",
-              month: "long",
-            });
-            return `${capitalizedWeekday} - ${datePart}`;
-          })(),
+  // Get disabled dates for calendar
+  const getDisabledDates = () => {
+    return (date: Date) => {
+      // Disable past dates
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (date < today) return true;
+
+      // Disable non-business days
+      return !isBusinessDay(date);
+    };
+  };
+
+  // Get day info for selected date
+  const getDayInfo = (date: Date) => {
+    const dayOfWeek = date.getDay();
+    const dayMapping = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    const dayId = dayMapping[dayOfWeek];
+
+    return {
+      date: date.toISOString().split("T")[0],
+      dayId,
+      dayName: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"][dayOfWeek],
+      dateFormatted: (() => {
+        const weekday = date.toLocaleDateString("nl-NL", {
+          weekday: "long",
         });
-      }
-    }
-
-    return days;
+        const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
+        const datePart = date.toLocaleDateString("nl-NL", {
+          day: "numeric",
+          month: "long",
+        });
+        return `${capitalizedWeekday} - ${datePart}`;
+      })(),
+    };
   };
 
   const onSubmit = async (data: BookingFormData) => {
@@ -344,7 +377,7 @@ function BookPageContent() {
                           <FormItem>
                             <FormLabel>Merk *</FormLabel>
                             <Select
-                              onValueChange={(value:string) => {
+                              onValueChange={(value: string) => {
                                 field.onChange(value);
                                 setSelectedBrand(value);
                                 setSelectedModel("");
@@ -387,7 +420,7 @@ function BookPageContent() {
                             <FormItem>
                               <FormLabel>Apparaat Model *</FormLabel>
                               <Select
-                                onValueChange={(value:string) => {
+                                onValueChange={(value: string) => {
                                   field.onChange(value);
                                   setSelectedModel(value);
                                 }}
@@ -446,8 +479,8 @@ function BookPageContent() {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {repairServices.map((service) => (
-                                  <SelectItem key={service.id} value={service.id}>
+                                {allRepairTypes.map((service) => (
+                                  <SelectItem key={service.name} value={service.name}>
                                     <div>
                                       <div className="font-medium">{service.name}</div>
                                       <div className="text-sm text-gray-500">{service.description}</div>
@@ -460,6 +493,16 @@ function BookPageContent() {
                           </FormItem>
                         )}
                       />
+
+                      {/* Price Display - Show after service selection */}
+                      {selectedBrand && selectedBrand !== "other" && form.getValues("model") && form.getValues("service") && (
+                        <PriceDisplay
+                          deviceModelId={form.getValues("model") || null}
+                          deviceModelName={allDeviceModels.find((m) => m._id === form.getValues("model"))?.name}
+                          allRepairServices={allRepairServices}
+                          selectedService={form.getValues("service")}
+                        />
+                      )}
 
                       <FormField
                         control={form.control}
@@ -495,69 +538,83 @@ function BookPageContent() {
 
                 {/* Step 2: Schedule Appointment */}
                 {currentStep >= 2 && (
-                  <div ref={step2Ref} className="bg-white rounded-lg shadow-lg p-8">
+                  <div ref={step2Ref} className="bg-white rounded-lg shadow-lg p-4 py-8 md:p-8">
                     <h3 className="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
                       <Calendar className="h-6 w-6 mr-3 text-blue-600" />
                       Stap 2: Afspraak Inplannen
                     </h3>
 
-                    {/* Day Selection */}
-                    <div className="mb-8">
-                      <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een dag *</FormLabel>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {getAvailableDays().map((day) => (
-                          <button
-                            key={day.date}
-                            type="button"
-                            onClick={() => {
-                              setSelectedDate(day.date);
-                              setSelectedDateObj(day);
-                              form.setValue("preferredDate", day.date);
-                              form.setValue("preferredTime", ""); // Reset time when changing day
+                    {/* Calendar and Time Slots */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      {/* Calendar */}
+                      <div className="lg:col-span-2">
+                        <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een dag *</FormLabel>
+                        <div className="border rounded-lg p-4 bg-white">
+                          <CalendarComponent
+                            selected={calendarDate}
+                            setSelected={(date) => {
+                              if (date) {
+                                setCalendarDate(date);
+                                const dayObj = getDayInfo(date);
+                                setSelectedDate(dayObj.date);
+                                setSelectedDateObj(dayObj);
+                                form.setValue("preferredDate", dayObj.date);
+                                form.setValue("preferredTime", ""); // Reset time when changing day
+                              }
                             }}
-                            className={`p-4 rounded-lg border-2 text-left transition-all ${
-                              selectedDate === day.date
-                                ? "border-blue-500 bg-blue-50 text-blue-900 shadow-md"
-                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                            }`}
-                          >
-                            <div className="font-bold text-gray-900">{day.dateFormatted}</div>
-                          </button>
-                        ))}
+                            disabled={getDisabledDates()}
+                            className="rounded-md"
+                          />
+                        </div>
+                        {!selectedDateObj && <p className="text-sm text-gray-500 mt-2">Kies een dag om beschikbare tijden te zien</p>}
                       </div>
-                      {!selectedDateObj && <p className="text-sm text-gray-500 mt-2">Kies een dag om beschikbare tijden te zien</p>}
+
+                      {/* Time Slots */}
+                      <div className="lg:col-span-1">
+                        <FormLabel className="text-lg font-semibold mb-4 block">Beschikbare tijden *</FormLabel>
+                        {selectedDateObj ? (
+                          <div className="space-y-2">
+                            <div className="text-sm text-gray-600 mb-3">{selectedDateObj.dateFormatted}</div>
+                            <div className="grid grid-cols-2 gap-2">
+                              {getTimeSlotsForSelectedDay().map((slot) => (
+                                <button
+                                  key={slot.id}
+                                  type="button"
+                                  onClick={() => form.setValue("preferredTime", slot.time)}
+                                  className={`p-3 rounded-lg border-2 text-center text-sm font-medium transition-all ${
+                                    form.getValues("preferredTime") === slot.time
+                                      ? "border-blue-500 bg-blue-500 text-white shadow-md"
+                                      : "border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700"
+                                  }`}
+                                >
+                                  {slot.display}
+                                </button>
+                              ))}
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">Elke tijdslot is 30 minuten</p>
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 text-gray-500">
+                            <Calendar className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                            <p>Selecteer eerst een dag</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Time Selection */}
-                    {selectedDateObj && (
-                      <div>
-                        <FormLabel className="text-lg font-semibold mb-4 block">Selecteer een tijd *</FormLabel>
-                        <FormField
-                          control={form.control}
-                          name="preferredTime"
-                          render={({ field }) => (
-                            <FormItem>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Selecteer tijd" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {getTimeSlotsForSelectedDay().map((slot) => (
-                                    <SelectItem key={slot.id} value={slot.time}>
-                                      {slot.display}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <p className="text-sm text-gray-500 mt-2">Elke tijdslot is 30 minuten. Kies een tijd die het beste bij u past.</p>
-                      </div>
-                    )}
+                    {/* Hidden form field for time selection */}
+                    <FormField
+                      control={form.control}
+                      name="preferredTime"
+                      render={({ field }) => (
+                        <FormItem className="hidden">
+                          <FormControl>
+                            <Input {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <div className="mt-8 flex justify-end">
                       <Button

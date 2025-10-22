@@ -23,6 +23,4 @@ export const repairTypesSchema: CreateCollectionOptions = {
   },
 };
 
-export const repairTypesIndexes: IndexDescription[] = [
-  { key: { name: 1 }, unique: true, name: "repair_type_name_idx" },
-];
+export const repairTypesIndexes: IndexDescription[] = [{ key: { name: 1 }, unique: true, name: "repair_type_name_idx" }];
