@@ -106,6 +106,7 @@ export default function ContactPage() {
                           </p>
                         ))}
                       </div>
+                      <p className="text-sm text-blue-600 font-medium mt-3 italic">* Reservering is verplicht</p>
                     </div>
                   </div>
                 </div>

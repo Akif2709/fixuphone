@@ -82,6 +82,12 @@ export function ContactInfoTab() {
     setFormData((prev) => ({ ...prev, businessHours: updatedHours }));
   };
 
+  const handleToggleBusinessDay = (index: number) => {
+    const updatedHours = [...formData.businessHours];
+    updatedHours[index] = { ...updatedHours[index], isOpen: !updatedHours[index].isOpen };
+    setFormData((prev) => ({ ...prev, businessHours: updatedHours }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -197,27 +203,34 @@ export function ContactInfoTab() {
                   <div className="w-32">
                     <p className="font-medium">{hours.day}</p>
                   </div>
-                  {hours.isOpen ? (
-                    <div className="flex items-center gap-2 flex-1">
-                      <Input
-                        type="time"
-                        value={hours.openTime}
-                        onChange={(e) => handleBusinessHourChange(index, "openTime", e.target.value)}
-                        className="w-32"
+                  <div className="flex items-center gap-3 flex-1">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={hours.isOpen}
+                        onChange={() => handleToggleBusinessDay(index)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
-                      <span>-</span>
-                      <Input
-                        type="time"
-                        value={hours.closeTime}
-                        onChange={(e) => handleBusinessHourChange(index, "closeTime", e.target.value)}
-                        className="w-32"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex-1">
-                      <p className="text-gray-500">Gesloten</p>
-                    </div>
-                  )}
+                      <span className="text-sm text-gray-700">Open</span>
+                    </label>
+                    {hours.isOpen && (
+                      <div className="flex items-center gap-2 ml-auto">
+                        <Input
+                          type="time"
+                          value={hours.openTime}
+                          onChange={(e) => handleBusinessHourChange(index, "openTime", e.target.value)}
+                          className="w-32"
+                        />
+                        <span className="text-gray-500">-</span>
+                        <Input
+                          type="time"
+                          value={hours.closeTime}
+                          onChange={(e) => handleBusinessHourChange(index, "closeTime", e.target.value)}
+                          className="w-32"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

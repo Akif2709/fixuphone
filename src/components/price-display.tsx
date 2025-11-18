@@ -36,50 +36,12 @@ export function PriceDisplay({ deviceModelId, deviceModelName, allRepairServices
         filteredServices = filteredServices.filter((s) => s.repairType.name === selectedService);
       }
 
+      // Filter out services with price 0 (treat as no price)
+      filteredServices = filteredServices.filter((service) => service.price > 0);
+
       setRepairServices(filteredServices);
       return;
     }
-
-    // Fallback: fetch prices for specific device model
-    // const fetchPrices = async () => {
-    //   setLoading(true);
-    //   setError(null);
-
-    //   try {
-    //     const result = await getAllRepairServicesWithRepairTypes();
-
-    //     if (result.success && result.data) {
-    //       let filteredServices = result.data.filter(
-    //         service => service.deviceModelId === deviceModelId
-    //       );
-
-    //       // If a specific service is selected, filter to that service only
-    //       if (selectedService) {
-    //         // Find the service name from the repairServices array
-    //         const serviceInfo = repairServicesData.find(s => s.id === selectedService);
-    //         const serviceName = serviceInfo?.name;
-
-    //         if (serviceName) {
-    //           filteredServices = filteredServices.filter(
-    //             service => service.repairType?.name?.toLowerCase().includes(serviceName.toLowerCase()) ||
-    //                        service.repairType?._id === selectedService
-    //           );
-    //         }
-    //       }
-
-    //       setRepairServices(filteredServices);
-    //     } else {
-    //       setError(result.error || "Failed to fetch prices");
-    //     }
-    //   } catch (err) {
-    //     console.error("Error fetching repair services:", err);
-    //     setError("Failed to fetch prices");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-
-    // fetchPrices();
   }, [deviceModelId, allRepairServices, selectedService]);
 
   if (!deviceModelId) {
