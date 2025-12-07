@@ -243,7 +243,7 @@ function BookPageContent() {
     const dayId = dayMapping[dayOfWeek];
 
     return {
-      date: date.toISOString().split("T")[0],
+      date: date.toISOString(),
       dayId,
       dayName: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"][dayOfWeek],
       dateFormatted: (() => {
@@ -289,7 +289,7 @@ function BookPageContent() {
         deviceModel: deviceModelName,
         service: data.service,
         issue: data.issue,
-        preferredDate: data.preferredDate,
+        preferredDate: new Date(data.preferredDate).toLocaleDateString("nl-NL"),
         preferredTime: data.preferredTime,
         bookingId: bookingId,
       };
