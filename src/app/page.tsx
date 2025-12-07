@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useContactInfo } from "@/hooks/use-contact-info";
 
+
 export default function Home() {
   const { contactInfo } = useContactInfo();
 
